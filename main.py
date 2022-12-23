@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,redirect
 import mysql.connector  # pip install mysql-connector-python
 
 app = Flask(__name__)
@@ -36,11 +36,10 @@ def login_validation():
     cursor.execute("""SELECT * FROM EXPENSE_DETAILS WHERE EMAIL_ID LIKE '{}' AND USER_PASSWORD LIKE '{}'""".format(email,passwd))
     users = cursor.fetchall()
     # above code will return the one result in list of tuple
-    print(users)
     if len(users) > 0:
-        return render_template('home.html')
+        return redirect('/home')
     else:
-        return render_template('index.html')
+        return redirect('/')
 
 
 @app.route('/registration',methods=['POST'])
@@ -51,9 +50,9 @@ def registration():
     if len(name)>5 and len(email)>10 and len(passwd)>5:
         cursor.execute("""INSERT INTO expense_details VALUES(NULL,'{}','{}','{}')""".format(name,email,passwd))
         myconn.commit()
-        return f"Successfully Registered!!"
+        return redirect('/')
     else:
-        return render_template("register.html")
+        return redirect('/register')
 
 
 if __name__ == "__main__":

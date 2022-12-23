@@ -43,14 +43,35 @@ Creating a simple Expense Track app using Flask and Python
             else:
                 return render_template("register.html")
             ```
-   2. Test
-      1. Register with correct data
-         ![img_1.png](img_1.png)
-         ![img.png](img.png)
-      
-      3. Register with incomplete data it will revert on same page ![img_2.png](img_2.png)
 
- 
+ # Problem
+   - Here we have a problem with url, our '/login_validation' and '/registration' route must be hidden because this routes handling functionality
+   - Problem in login ![img.png](img.png) ![img_1.png](img_1.png) ![img_5.png](img_5.png)
+   - Registration problem with correct data ![img_2.png](img_2.png) ![img_3.png](img_3.png)
+   - with incorrect data ![img_4.png](img_4.png)
+
+   # Solution
+   1. instead of returning as `return render_template('home.html')` or return render_template("register.html") will use redirect function
+      1. Login 
+         ```
+            from flask import redirect
+            if len(users) > 0:
+                return redirect('/home')
+            else:
+                return redirect('/')
+         ``` 
+         ![img_6.png](img_6.png)
+   
+      2. Register
+         ```
+         if len(name)>5 and len(email)>10 and len(passwd)>5:
+             cursor.execute("""INSERT INTO expense_details VALUES(NULL,'{}','{}','{}')""".format(name,email,passwd))
+             myconn.commit()
+             return redirect('/')
+         else:
+             return redirect('/register')
+         ```
+        
 
         
                 
