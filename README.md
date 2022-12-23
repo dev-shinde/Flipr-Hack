@@ -11,14 +11,13 @@ Creating a simple Expense Track app using Flask and Python
              1. index.html
              2. register.html
              3. about.html
+             4. home.html
+                * simple Homepage designed in this ![img.png](img.png)
           3. static 
              1. css
                 1. style.css
-                    
-    2. Output: 
-       1. Login Page `http://127.0.0.1:5000/` ![img.png](img.png)
-       2. Register Page `http://127.0.0.1:5000/register` ![img_1.png](img_1.png)
-       3. About Page `http://127.0.0.1:5000/about` ![img_2.png](img_2.png)
+                
+       
           
           
           
