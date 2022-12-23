@@ -21,25 +21,29 @@ Creating a simple Expense Track app using Flask and Python
    2. After login in one tab login page accessible in another tab (in one browser only one user can login at a time)
    3. validation routes are visible in url bar
 
-# Solution for 1. Homepage is accessible without login
- 1. To know that a user logged in or not we need to track session by assigning a secret key to server and to the browser session,
- 2. any user will be allowed to access homepage or any user related data page after only if the session secret key present in current session
- 3. session key will only generate after successful login 
-    1. session is special type of dictionary in flask
-         ```
-              from flask import session
-              if len(users) > 0:
-                  session['user_id'] = users[0][0] # storing user id 
-                  return redirect('/home')
-              else:
-                  return redirect('/')
-          ```
-    2. Let's check session id without login, go to Inspect > Application > Cookies > this url ![img.png](img.png)
-      
-    3. Let's check session details after login ![img_1.png](img_1.png)
-    4. Check in other tab session will be same ![img_2.png](img_2.png)
-   
-        
+# Solution for 1. After login in one tab login page accessible in another tab
+### if a user logged-in and session is active then he/she can't go to login page or register page in another tab of same window 
+1. If user already logged-in and session(a dictionary of flask) is active and then try to go login page or register, will be redirected to home page
+2. we will check if `user_id` present in session then will redirect to home page if user_id not present in session then only able to visit login or register page
+ 
+   ```
+    @app.route('/')
+    def login():
+        # if user is already logged in same browser and session is active then redirect to homepage else redirect to login page
+        if 'user_id' in session:
+            return redirect("/home")
+        else:
+            return render_template("index.html")
+    
+    
+    @app.route('/register')
+    def register():
+        # if user is already logged in same browser and session is active then redirect to homepage else redirect to register page
+        if 'user_id' in session:
+            return redirect("/home")
+        else:
+            return render_template("register.html")
+    ```
                 
        
           

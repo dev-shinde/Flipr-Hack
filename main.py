@@ -14,12 +14,20 @@ cursor = myconn.cursor()
 
 @app.route('/')
 def login():
-    return render_template("index.html")
+    # if user is already logged in same browser and session is active then redirect to homepage else redirect to login page
+    if 'user_id' in session:
+        return redirect("/home")
+    else:
+        return render_template("index.html")
 
 
 @app.route('/register')
 def register():
-    return render_template("register.html")
+    # if user is already logged in same browser and session is active then redirect to homepage else redirect to register page
+    if 'user_id' in session:
+        return redirect("/home")
+    else:
+        return render_template("register.html")
 
 
 @app.route('/home')
@@ -61,6 +69,12 @@ def registration():
         return redirect('/')
     else:
         return redirect('/register')
+
+
+@app.route('/logout')
+def logout():
+    session.pop("user_id")
+    return redirect('/')
 
 
 if __name__ == "__main__":
