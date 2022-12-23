@@ -15,64 +15,30 @@ Creating a simple Expense Track app using Flask and Python
           3. static 
              1. css
                 1. style.css
-4. Register Functionality 
-   1. Register Functionality
-        * Front end: Take the userdata from the form on clicking Register button then send to '/registration' using 'post' method
-            ```
-          <form class="form" method="post" action="/registration">
-                <label>Name</label><br>
-                <input type="text" class="form-control" name="name" placeholder="Enter your full name"><br>
-                <label>Email</label><br>
-                <input type="email" class="form-control" name="email" placeholder="Enter your email"><br>
-                <label>Password</label><br>
-                <input type="password" class="form-control" name="password" placeholder="Enter your password"><br><br>
-                <input type="submit" class="btn btn-primary btn-block btn-lg" value="Register">
-              </form>
+
+# Problems 
+   1. Homepage is accessible without login (in any browser in any tab), it should be not accessible without login
+   2. After login in one tab login page accessible in another tab (in one browser only one user can login at a time)
+   3. validation routes are visible in url bar
+
+# Solution for 1. Homepage is accessible without login
+ 1. To know that a user logged in or not we need to track session by assigning a secret key to server and to the browser session,
+ 2. any user will be allowed to access homepage or any user related data page after only if the session secret key present in current session
+ 3. session key will only generate after successful login 
+    1. session is special type of dictionary in flask
+         ```
+              from flask import session
+              if len(users) > 0:
+                  session['user_id'] = users[0][0] # storing user id 
+                  return redirect('/home')
+              else:
+                  return redirect('/')
           ```
-          * Backend: will receive the data from frontend at '/registration' then insert into database over the condition otherwise keep on same page
-            ```
-            @app.route('/registration',methods=['POST'])
-            def registration():
-            name = request.form.get('name')
-            email = request.form.get('email')
-            passwd = request.form.get('password')
-            if len(name)>5 and len(email)>10 and len(passwd)>5:
-                cursor.execute("""INSERT INTO expense_details VALUES(NULL,'{}','{}','{}')""".format(name,email,passwd))
-                myconn.commit()
-                return  f"Successfully Registered!!"
-            else:
-                return render_template("register.html")
-            ```
-
- # Problem
-   - Here we have a problem with url, our '/login_validation' and '/registration' route must be hidden because this routes handling functionality
-   - Problem in login ![img.png](img.png) ![img_1.png](img_1.png) ![img_5.png](img_5.png)
-   - Registration problem with correct data ![img_2.png](img_2.png) ![img_3.png](img_3.png)
-   - with incorrect data ![img_4.png](img_4.png)
-
-   # Solution
-   1. instead of returning as `return render_template('home.html')` or return render_template("register.html") will use redirect function
-      1. Login 
-         ```
-            from flask import redirect
-            if len(users) > 0:
-                return redirect('/home')
-            else:
-                return redirect('/')
-         ``` 
-         ![img_6.png](img_6.png)
+    2. Let's check session id without login, go to Inspect > Application > Cookies > this url ![img.png](img.png)
+      
+    3. Let's check session details after login ![img_1.png](img_1.png)
+    4. Check in other tab session will be same ![img_2.png](img_2.png)
    
-      2. Register
-         ```
-         if len(name)>5 and len(email)>10 and len(passwd)>5:
-             cursor.execute("""INSERT INTO expense_details VALUES(NULL,'{}','{}','{}')""".format(name,email,passwd))
-             myconn.commit()
-             return redirect('/')
-         else:
-             return redirect('/register')
-         ```
-        
-
         
                 
        

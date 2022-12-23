@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request,redirect
+from flask import Flask, render_template, request,redirect, session
 import mysql.connector  # pip install mysql-connector-python
+import os
 
 app = Flask(__name__)
-
+sec_key = os.urandom(24)
+print(sec_key)
+app.secret_key = sec_key # generating 24 char key
 # creating connection object with mysql
 myconn = mysql.connector.connect(host="localhost", user="root", passwd="123456", port=3306, database='expense',
                                  auth_plugin='mysql_native_password')
@@ -21,7 +24,11 @@ def register():
 
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    print(session)
+    if 'user_id' in session:
+        return render_template('home.html')
+    else:
+        return redirect('/')
 
 
 @app.route('/about')
@@ -37,6 +44,7 @@ def login_validation():
     users = cursor.fetchall()
     # above code will return the one result in list of tuple
     if len(users) > 0:
+        session['user_id'] = users[0][0]
         return redirect('/home')
     else:
         return redirect('/')
