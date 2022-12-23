@@ -15,67 +15,42 @@ Creating a simple Expense Track app using Flask and Python
           3. static 
              1. css
                 1. style.css
-4. Login Functionality 
-   1. Login Functionality
-      * once the submit button clicked the form data with name email and password will be sent through `post` method to this location `'/login_validation'` (a route where data will receive)
-        * receiving data at this route using post `main.py`
-        * it will receive data using `request` function
+4. Register Functionality 
+   1. Register Functionality
+        * Front end: Take the userdata from the form on clicking Register button then send to '/registration' using 'post' method
+            ```
+          <form class="form" method="post" action="/registration">
+                <label>Name</label><br>
+                <input type="text" class="form-control" name="name" placeholder="Enter your full name"><br>
+                <label>Email</label><br>
+                <input type="email" class="form-control" name="email" placeholder="Enter your email"><br>
+                <label>Password</label><br>
+                <input type="password" class="form-control" name="password" placeholder="Enter your password"><br><br>
+                <input type="submit" class="btn btn-primary btn-block btn-lg" value="Register">
+              </form>
           ```
-          from flask import request
-          @app.route('/login_validation',methods=['POST']) #where and how will receive data
-          def login_validation():
-            email = request.form.get('email') # receiving form data email and string in email variable, this 'email' keyword should be same as in index.html form name 
-            passwd = request.form.get('password') # receiving form data password and storing in passwd varibale  this 'password' keyword should be same as in index.html form name
-            return f"Email : {email} and Password: {passwd}"
-          ```
+          * Backend: will receive the data from frontend at '/registration' then insert into database over the condition otherwise keep on same page
+            ```
+            @app.route('/registration',methods=['POST'])
+            def registration():
+            name = request.form.get('name')
+            email = request.form.get('email')
+            passwd = request.form.get('password')
+            if len(name)>5 and len(email)>10 and len(passwd)>5:
+                cursor.execute("""INSERT INTO expense_details VALUES(NULL,'{}','{}','{}')""".format(name,email,passwd))
+                myconn.commit()
+                return  f"Successfully Registered!!"
+            else:
+                return render_template("register.html")
+            ```
+   2. Test
+      1. Register with correct data
+         ![img_1.png](img_1.png)
+         ![img.png](img.png)
+      
+      3. Register with incomplete data it will revert on same page ![img_2.png](img_2.png)
 
-
-# Setup MySql for Database connection with python
-   1. Install [Mysql](https://www.mysql.com/downloads/), not now the credentials open MySQL workbench, there will be usernmae, hostname, port no
-      1. install mysql.connector package `pip install mysql-connector-python` refer [this video](mysql-connector-python) for mysql connection error 
-            * Connect and test
-              ```
-              import mysql.connector  
-              myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "123456",port=3306,database='expense', auth_plugin='mysql_native_password')
-              cursor = myconn.cursor()
-              cursor.execute("""select * from expense_details""")
-              data = cursor.fetchall() # returns list of tuple of fetched rows
-              for i in data:
-                  print(i)
-              ```
-              * Output 
-               ```
-              (1, 'Santosh Kumar', 'santosh@gmail.com', 'Qwe123')
-              (2, 'Upender Yadav', 'robinhud299@gmail.com', '12345')
-              (3, 'Virat Kohali', 'virat@gmail.com', '12345')
-              (4, 'MS Dhoni', 'msd7@gmail.com', '12345')
-              (5, 'Santosh Yadav', 'sdsdsd@xcxc', '12345')
-              ```
-              setup completed
-   2. Now, validating user login with database
-      1. validation code: if we consider email as unique entry then combination of email and password will be unique result
-         ```
-         @app.route('/login_validation', methods=['POST'])
-         def login_validation():
-         email = request.form.get('email')
-         passwd = request.form.get('password')
-         cursor.execute("""SELECT * FROM EXPENSE_DETAILS WHERE EMAIL_ID LIKE '{}' AND USER_PASSWORD LIKE '{}'""".format(email,passwd))
-         users = cursor.fetchall()
-         # above code will return the one result in list of tuple
-         if len(users) == 1:
-            return f"Hello, {users[0][1]}"
-         else: 
-            return "Incorrect data"
-         ```
-   3. Test: 
-      1. Entering correct data
-         * ![img_3.png](img_3.png)
-         * output:
-           * ![img_4.png](img_4.png)
-      2. Entering incorrect data 
-         * ![img_5.png](img_5.png)
-         * output 
-           * ![img_6.png](img_6.png)
+ 
 
         
                 

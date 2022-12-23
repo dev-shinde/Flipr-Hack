@@ -37,10 +37,23 @@ def login_validation():
     users = cursor.fetchall()
     # above code will return the one result in list of tuple
     print(users)
-    if len(users) == 1:
-        return f"Hello, {users[0][1]}"
+    if len(users) > 0:
+        return render_template('home.html')
     else:
-        return "Incorrect data"
+        return render_template('index.html')
+
+
+@app.route('/registration',methods=['POST'])
+def registration():
+    name = request.form.get('name')
+    email = request.form.get('email')
+    passwd = request.form.get('password')
+    if len(name)>5 and len(email)>10 and len(passwd)>5:
+        cursor.execute("""INSERT INTO expense_details VALUES(NULL,'{}','{}','{}')""".format(name,email,passwd))
+        myconn.commit()
+        return f"Successfully Registered!!"
+    else:
+        return render_template("register.html")
 
 
 if __name__ == "__main__":
