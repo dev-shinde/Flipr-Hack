@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -23,7 +23,11 @@ def about():
     return render_template("about.html")
 
 
-
+@app.route('/login_validation', methods=['POST'])
+def login_validation():
+    email = request.form.get('email')
+    passwd = request.form.get('password')
+    return f"Email : {email} and Password: {passwd}"
 
 
 if __name__ == "__main__":
