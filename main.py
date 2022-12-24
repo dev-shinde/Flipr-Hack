@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, flash
 import mysql.connector  # pip install mysql-connector-python
 import os
 from datetime import timedelta  # used for setting session timeout
@@ -22,6 +22,7 @@ def login():
     if 'user_id' in session:
         cursor.execute("""select * from user_login where user_id = {}""".format(session['user_id']))
         userdata = cursor.fetchall()
+        flash("Already an user is logged-in!")
         return redirect('/home')
     else:
         return render_template("login.html")
@@ -32,6 +33,7 @@ def register():
     if 'user_id' in session:
         cursor.execute("""select * from user_login where user_id = {}""".format(session['user_id']))
         userdata = cursor.fetchall()
+        flash("Already an user is logged-in!")
         return redirect('/home')
     else:
         return render_template("register.html")
@@ -66,10 +68,10 @@ def login_validation():
             session['user_id'] = users[0][0]
             return redirect('/home')
         else:
+            flash("Invalid email and password!")
             return redirect('/')
     else:
-        # cursor.execute("""select * from user_login where user_id = {} """.format(session['user_id']))
-        # userdata = cursor.fetchall()
+        flash("Already an user is logged-in!")
         return redirect('/home')
 
 
@@ -92,6 +94,7 @@ def registration():
             myuser = cursor.fetchall()
             print(myuser)
             session['user_id'] = myuser[0][0]
+            flash("Already an user is logged-in!")
             return redirect('/home')
         else:
             return redirect('/register')
@@ -118,7 +121,7 @@ def analysis():
 
         fig = px.bar(df, x='Expense', y='Amount', color='City', barmode='group')
         graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        return render_template('analysis.html', graphJSON=graphJSON)
+        return render_template('analysis.html',user_name = userdata[0][1], graphJSON=graphJSON)
     else:
         return redirect('/')
 

@@ -19,14 +19,7 @@ Creating a simple Expense Track app using Flask and Python
                 1. style.css
 
 ## Update
-1. Form submit alert, without entering required field form cannot be submitted, it will raise an alert![img.png](img.png) 
-          
+1. Flash/warning message feature added for login with invalid data ![img.png](img.png)
+2. added flash/warning message when an already logged-in session try to login or register ![img_1.png](img_1.png)
                     
-            
-## Git Push Commands
-1. `git init` to initialize repo
-2. `git add .` adding files 
-3. `git commit -m "Add existing project files to Git"` stagging 
-4. `git remote add origin https://github.com/cameronmcnz/example-website.git` (optionl assiging repo )
-5. `git status` to check stagging/added files status
-6. `git push -u -f origin master` final push to git
+
