@@ -50,9 +50,10 @@ Creating a simple Expense Track app using Flask and Python
 6. Auto session timeout is max 5minutes 
    1. if no longer active after 5 mins it will be logged-out and session time will be expired
                 
-       
-          
-          
+   
+## Update
+1. Connected with new database
+2. Add new Expense collapse form created
           
                     
             

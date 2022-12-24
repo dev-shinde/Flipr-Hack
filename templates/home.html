@@ -14,13 +14,13 @@
     </head>
     <body>
      <div class="bg-nav d-flex flex-column flex-md-row align-items-center pb-0 mb-0 border-bottom">
-      <h5 class="m-3 mr-md-auto font-weight-normal">Expense Tracker</h5>
+      <h5 class="m-3 mr-md-auto font-weight-normal">Expense Tracker - {{ user_name }}</h5>
 
       <nav class="m-2 my-md-0 mr-md-3">
         <a class="py-2 m-2 text-dark" href="/home">Home</a>
         <a class="py-2 m-2 text-dark" href="#">Analysis</a>
         <a class="py-2 m-2 text-dark" href="#">Profile</a>
-        <a class="py-2 m-2 text-dark" href="#">Settings</a>
+        <a class="py-2 m-2 text-dark" href="#">About Us</a>
       </nav>
          <a class="btn m-2 btn-outline-warning" href="/logout">Logout</a>
     </div>
@@ -29,33 +29,33 @@
          <div class="row my-2">
              <div class="col-md-3">
                  <div class="card">
-                     <div class="card-body bg-success">
+                     <div class="card-body bg-warning">
                          <h5 class="text-center">Total Earnings</h5>
                          <h1 class="text-center">Rs 56000</h1>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-md-3">
+                 <div class="card">
+                     <div class="card-body bg-danger">
+                         <h5 class="text-center">Total Spends</h5>
+                         <h1 class="text-center">Rs 20000</h1>
                      </div>
                  </div>
              </div>
              <div class="col-md-3">
                  <div class="card">
                      <div class="card-body bg-primary">
-                         <h5 class="text-center">Total Earnings</h5>
-                         <h1 class="text-center">Rs 56000</h1>
+                         <h5 class="text-center">Total Investments</h5>
+                         <h1 class="text-center">Rs 15000</h1>
                      </div>
                  </div>
              </div>
              <div class="col-md-3">
                  <div class="card">
-                     <div class="card-body bg-info">
-                         <h5 class="text-center">Total Earnings</h5>
-                         <h1 class="text-center">Rs 56000</h1>
-                     </div>
-                 </div>
-             </div>
-             <div class="col-md-3">
-                 <div class="card">
-                     <div class="card-body bg-warning">
-                         <h5 class="text-center">Total Earnings</h5>
-                         <h1 class="text-center">Rs 56000</h1>
+                     <div class="card-body bg-success">
+                         <h5 class="text-center">Total Savings</h5>
+                         <h1 class="text-center">Rs 21000</h1>
                      </div>
                  </div>
              </div>
@@ -67,29 +67,29 @@
                   <thead>
                     <tr>
                       <th scope="col">#</th>
-                      <th scope="col">First</th>
-                      <th scope="col">Last</th>
-                      <th scope="col">Handle</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Expense</th>
+                      <th scope="col">Amount</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <th scope="row">1</th>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
+                      <td>10-10-2022</td>
+                      <td>Earnings</td>
+                      <td>56000</td>
                     </tr>
                     <tr>
                       <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
+                      <td>15-10-2022</td>
+                      <td>Spends</td>
+                      <td>20000</td>
                     </tr>
                     <tr>
                       <th scope="row">3</th>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>@twitter</td>
+                      <td>16-10-2022</td>
+                      <td>Invested</td>
+                      <td>15000</td>
                     </tr>
                   </tbody>
                 </table>
@@ -99,7 +99,27 @@
                  <div class="card text-center">
                      <div class="card-body">
                          <p>Create a new expense</p>
-                         <button class="btn btn-danger btn-block">Create</button>
+                         <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Add New Record
+                         </a>
+                         <div class="collapse" id="collapseExample">
+                              <div class="card card-body">
+                                <form>
+                                    <input type="date" class="form-control" name="date" placeholder="Select Date">
+<!--                                    <div class="input-group mb-3">-->
+                                      <select class="form-control" id="inputGroupSelect02">
+                                        <option selected>Expense type...</option>
+                                        <option value="1">Earning</option>
+                                        <option value="2">Spend</option>
+                                        <option value="3">Investment</option>
+                                        <option value="3">Savings</option>
+                                      </select>
+<!--                                    </div>-->
+                                    <input type="number" class="form-control" name="amount" placeholder="Enter Amount">
+                                    <input type="submit" class="btn btn-primary btn-block" value="Save">
+                                </form>
+                              </div>
+                         </div>
                      </div>
 
                  </div>
