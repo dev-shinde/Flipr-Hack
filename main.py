@@ -2,7 +2,10 @@ from flask import Flask, render_template, request, redirect, session, url_for
 import mysql.connector  # pip install mysql-connector-python
 import os
 from datetime import timedelta  # used for setting session timeout
-from markupsafe import escape
+import pandas as pd
+import json
+import plotly
+import plotly.express as px
 
 
 app = Flask(__name__)
@@ -19,9 +22,9 @@ def login():
     if 'user_id' in session:
         cursor.execute("""select * from user_login where user_id = {}""".format(session['user_id']))
         userdata = cursor.fetchall()
-        return redirect(url_for('home', user_name=userdata[0][1]))
+        return redirect('/home')
     else:
-        return render_template("index.html")
+        return render_template("login.html")
 
 
 @app.route('/register')
@@ -29,7 +32,7 @@ def register():
     if 'user_id' in session:
         cursor.execute("""select * from user_login where user_id = {}""".format(session['user_id']))
         userdata = cursor.fetchall()
-        return redirect(url_for("home", user_name=userdata[0][1]))
+        return redirect('/home')
     else:
         return render_template("register.html")
 
@@ -44,9 +47,9 @@ def home():
         return redirect('/')
 
 
-@app.route('/about')
-def about():
-    return render_template("about.html")
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
 
 
 @app.route('/login_validation', methods=['POST'])
@@ -61,7 +64,7 @@ def login_validation():
         # above code will return the one result in list of tuple
         if len(users) > 0:
             session['user_id'] = users[0][0]
-            return redirect('home')
+            return redirect('/home')
         else:
             return redirect('/')
     else:
@@ -89,13 +92,45 @@ def registration():
             myuser = cursor.fetchall()
             print(myuser)
             session['user_id'] = myuser[0][0]
-            return redirect(url_for('home', user_name=myuser[0][1]))
+            return redirect('/home')
         else:
             return redirect('/register')
     else:
         cursor.execute("""select * from user_login where user_id = {} """.format(session['user_id']))
         userdata = cursor.fetchall()
-        return redirect(url_for('home', user_name=userdata[0][1]))
+        return redirect('/home')
+
+
+@app.route('/analysis')
+def analysis():
+    if 'user_id' in session:
+        cursor.execute("""select * from user_login where user_id = {} """.format(session['user_id']))
+        userdata = cursor.fetchall()
+        students = [['Savings', 24000, 'Sydney', 'Australia'],
+                    ['Spends', 20000, 'Coimbatore', 'India'],
+                    ['Investments', 15000, 'Coimbatore', 'India'],
+                    ['Earnings', 56000, 'Tokyo', 'Japan']]
+
+        # Convert list to dataframe and assign column values
+        df = pd.DataFrame(students,
+                          columns=['Expense', 'Amount', 'City', 'Country'],
+                          index=['a', 'b', 'c', 'd'])
+
+        fig = px.bar(df, x='Expense', y='Amount', color='City', barmode='group')
+        graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        return render_template('analysis.html', graphJSON=graphJSON)
+    else:
+        return redirect('/')
+
+
+@app.route('/profile')
+def profile():
+    if 'user_id' in session:
+        cursor.execute("""select * from user_login where user_id = {} """.format(session['user_id']))
+        userdata = cursor.fetchall()
+        return render_template('profile.html', user_name=userdata[0][1])
+    else:
+        return redirect('/')
 
 
 @app.route('/logout')
