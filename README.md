@@ -19,13 +19,7 @@ Creating a simple Expense Track app using Flask and Python
                 1. style.css
 
 ## Update
-1. Home Page ![img_1.png](img_1.png) ![img.png](img.png)
-
-2. Simple Analysis Page ![img_2.png](img_2.png)
-
-3. Profile Page ![img_3.png](img_3.png)
-
-4. Contact Page ![img_4.png](img_4.png)
+1. Form submit alert, without entering required field form cannot be submitted, it will raise an alert![img.png](img.png) 
           
                     
             

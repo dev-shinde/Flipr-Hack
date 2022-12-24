@@ -105,17 +105,18 @@
                          <div class="collapse" id="collapseExample">
                               <div class="card card-body">
                                 <form>
-                                    <input type="date" class="form-control" name="date" placeholder="Select Date">
+                                    <input type="date" class="form-control" name="date" placeholder="Select Date" required>
 <!--                                    <div class="input-group mb-3">-->
-                                      <select class="form-control" id="inputGroupSelect02">
+                                      <select class="form-control" name="expense" required>
                                         <option selected>Expense type...</option>
                                         <option value="1">Earning</option>
                                         <option value="2">Spend</option>
                                         <option value="3">Investment</option>
-                                        <option value="3">Savings</option>
+                                        <option value="4">Savings</option>
                                       </select>
 <!--                                    </div>-->
-                                    <input type="number" class="form-control" name="amount" placeholder="Enter Amount">
+                                    <input type="number" class="form-control" name="amount" placeholder="Enter Amount" required>
+                                    <input type="text" class="form-control" name="description" placeholder="Enter notes">
                                     <input type="submit" class="btn btn-primary btn-block" value="Save">
                                 </form>
                               </div>
