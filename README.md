@@ -23,3 +23,6 @@ Creating a simple Expense Track app using Flask and Python
 2. added flash/warning message when an already logged-in session try to login or register ![img_1.png](img_1.png)
                     
 
+## Freeze requirements.txt
+save packages used in project, run below command to auto generate requirements.txt will all packages
+`pip freeze > requirements.txt`

@@ -7,7 +7,6 @@ import json
 import plotly
 import plotly.express as px
 
-
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 conn = mysql.connector.connect(host="localhost", user="root", passwd="123456", port=3306, database='expense',
@@ -19,33 +18,29 @@ cursor = conn.cursor()
 def login():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=5)
-    if 'user_id' in session:
-        cursor.execute("""select * from user_login where user_id = {}""".format(session['user_id']))
-        userdata = cursor.fetchall()
-        flash("Already an user is logged-in!")
+    if 'user_id' in session:  # if logged-in
+        flash("Already a user is logged-in!")
         return redirect('/home')
-    else:
+    else:  # if not logged-in
         return render_template("login.html")
 
 
 @app.route('/register')
 def register():
-    if 'user_id' in session:
-        cursor.execute("""select * from user_login where user_id = {}""".format(session['user_id']))
-        userdata = cursor.fetchall()
-        flash("Already an user is logged-in!")
+    if 'user_id' in session:  # if user is logged-in
+        flash("Already a user is logged-in!")
         return redirect('/home')
-    else:
+    else:  # if not logged-in
         return render_template("register.html")
 
 
 @app.route('/home')
 def home():
-    if 'user_id' in session:
+    if 'user_id' in session:  # if user is logged-in
         cursor.execute("""select * from user_login where user_id = {} """.format(session['user_id']))
         userdata = cursor.fetchall()
         return render_template('home.html', user_name=userdata[0][1])
-    else:
+    else:  # if not logged-in
         return redirect('/')
 
 
@@ -56,32 +51,29 @@ def contact():
 
 @app.route('/login_validation', methods=['POST'])
 def login_validation():
-    if 'user_id' not in session:
+    if 'user_id' not in session:  # if user not logged-in
         email = request.form.get('email')
         passwd = request.form.get('password')
-        cursor.execute(
-            """SELECT * FROM user_login WHERE email LIKE '{}' AND password LIKE '{}'""".format(email, passwd))
+        cursor.execute("""SELECT * FROM user_login WHERE email LIKE '{}' AND password LIKE '{}'""".format(email, passwd))
         users = cursor.fetchall()
-        print("Login_validation user: ", users)
-        # above code will return the one result in list of tuple
-        if len(users) > 0:
+        if len(users) > 0:  # if user details matched in db
             session['user_id'] = users[0][0]
             return redirect('/home')
-        else:
+        else:  # if user details not matched in db
             flash("Invalid email and password!")
             return redirect('/')
-    else:
-        flash("Already an user is logged-in!")
+    else:  # if user already logged-in
+        flash("Already a user is logged-in!")
         return redirect('/home')
 
 
 @app.route('/registration', methods=['POST'])
 def registration():
-    if 'user_id' not in session:
+    if 'user_id' not in session:  # if not logged-in
         name = request.form.get('name')
         email = request.form.get('email')
         passwd = request.form.get('password')
-        if len(name) > 5 and len(email) > 10 and len(passwd) > 5:
+        if len(name) > 5 and len(email) > 10 and len(passwd) > 5:  # if input details satisfy length condition
             try:
                 cursor.execute(
                     """INSERT INTO user_login(username, email, password) VALUES('{}','{}','{}')""".format(name, email,
@@ -89,24 +81,20 @@ def registration():
                 conn.commit()
             except Exception as e:
                 print(e)
-
             cursor.execute("""SELECT * from user_login where email LIKE '{}'""".format(email))
-            myuser = cursor.fetchall()
-            print(myuser)
-            session['user_id'] = myuser[0][0]
-            flash("Already an user is logged-in!")
+            user = cursor.fetchall()
+            session['user_id'] = user[0][0]  # set session on successful registration
+            flash("Already a user is logged-in!")
             return redirect('/home')
-        else:
+        else:  # if input condition length not satisfy
             return redirect('/register')
-    else:
-        cursor.execute("""select * from user_login where user_id = {} """.format(session['user_id']))
-        userdata = cursor.fetchall()
+    else:  # if already logged-in
         return redirect('/home')
 
 
 @app.route('/analysis')
 def analysis():
-    if 'user_id' in session:
+    if 'user_id' in session:  # if already logged-in
         cursor.execute("""select * from user_login where user_id = {} """.format(session['user_id']))
         userdata = cursor.fetchall()
         students = [['Savings', 24000, 'Sydney', 'Australia'],
@@ -121,28 +109,28 @@ def analysis():
 
         fig = px.bar(df, x='Expense', y='Amount', color='City', barmode='group')
         graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        return render_template('analysis.html',user_name = userdata[0][1], graphJSON=graphJSON)
-    else:
+        return render_template('analysis.html', user_name=userdata[0][1], graphJSON=graphJSON)
+    else:  # if not logged-in
         return redirect('/')
 
 
 @app.route('/profile')
 def profile():
-    if 'user_id' in session:
+    if 'user_id' in session:  # if logged-in
         cursor.execute("""select * from user_login where user_id = {} """.format(session['user_id']))
         userdata = cursor.fetchall()
         return render_template('profile.html', user_name=userdata[0][1])
-    else:
+    else:  # if not logged-in
         return redirect('/')
 
 
 @app.route('/logout')
 def logout():
     try:
-        session.pop("user_id")
-    except:  # a user already had been logged-out but still logged-in in another tab and from there try to log-out
-        pass
-    return redirect('/')
+        session.pop("user_id")  # delete the user_id in session (deleting session)
+        return redirect('/')
+    except: # if already logged-out but in another tab still logged-in
+        return redirect('/')
 
 
 if __name__ == "__main__":
