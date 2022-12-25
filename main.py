@@ -80,16 +80,19 @@ def registration():
                     """INSERT INTO user_login(username, email, password) VALUES('{}','{}','{}')""".format(name, email,
                                                                                                           passwd))
                 conn.commit()
-            except Exception as e:
-                print(e)
-            cursor.execute("""SELECT * from user_login where email LIKE '{}'""".format(email))
-            user = cursor.fetchall()
-            session['user_id'] = user[0][0]  # set session on successful registration
-            flash("Already a user is logged-in!")
-            return redirect('/home')
+                cursor.execute("""SELECT * from user_login where email LIKE '{}'""".format(email))
+                user = cursor.fetchall()
+                session['user_id'] = user[0][0]  # set session on successful registration
+                flash("Successfully Registered!!")
+                return redirect('/home')
+            except:
+                flash("Email id already exists, use another email!!")
+                return redirect('/register')
         else:  # if input condition length not satisfy
+            flash("Not enough data to register, try again!!")
             return redirect('/register')
     else:  # if already logged-in
+        flash("Already a user is logged-in!")
         return redirect('/home')
 
 

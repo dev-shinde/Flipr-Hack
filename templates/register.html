@@ -18,6 +18,7 @@
         <a href="" class="navbar-brand text-light">Expense App</a>
 
     </nav>
+
 <!--  creating a main div  -->
     <div class="container">
 <!--     creating a row-->
@@ -29,6 +30,17 @@
         </div>
         <div class="col-md-4">
 <!--          second columns, adding login section in this -->
+            {% for message in get_flashed_messages() %}
+         <div class="alert alert-warning alert-dismissible fade show my-1" role="alert">
+                    {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+         {% endfor %}
+
+
+
           <div class="card mt-50">
             <div class="card-body">
               <form class="form" method="post" action="/registration">
