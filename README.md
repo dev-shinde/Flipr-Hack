@@ -19,8 +19,20 @@ Creating a simple Expense Track app using Flask and Python
                 1. style.css
 
 ## Update
-1. Flash/warning message feature added for login with invalid data ![img.png](img.png)
-2. added flash/warning message when an already logged-in session try to login or register ![img_1.png](img_1.png)
+1. Password Reset Functionality added inside login page
+2. Password can be changed for existing user with authentication
+3. Email and password are required field, if not entered cannot proceed
+4. valid email format alert
+5. after reset form submitting will redirect to login page
+
+![img_4.png](img_4.png)
+- Changing password for an existing u
+- ser
+![img.png](img.png) ![img_1.png](img_1.png)
+
+- Changing password for non-existing user
+ ![img_2.png](img_2.png) ![img_3.png](img_3.png)
+
                     
 
 ## Freeze requirements.txt

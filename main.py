@@ -6,6 +6,7 @@ import pandas as pd
 import json
 import plotly
 import plotly.express as px
+import json
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -131,6 +132,30 @@ def logout():
         return redirect('/')
     except: # if already logged-out but in another tab still logged-in
         return redirect('/')
+
+
+@app.route('/reset', methods=['POST'])
+def reset():
+    if 'user_id' not in session:
+        email = request.form.get('femail')
+        pswd = request.form.get('pswd')
+        cursor.execute("""select * from user_login where email LIKE '{}'""".format(email))
+        userdata = cursor.fetchall()
+        print(userdata)
+        if len(userdata)>0:
+            try:
+                cursor.execute("""update user_login set password = '{}' where email = '{}'""".format(pswd,email))
+                conn.commit()
+                flash("Password has been changed!!")
+                return redirect('/')
+            except:
+                flash("Something went wrong!!")
+                return redirect('/')
+        else:
+            flash("Invalid email address!!")
+            return redirect('/')
+    else:
+        return redirect('/home')
 
 
 if __name__ == "__main__":
