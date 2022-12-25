@@ -55,7 +55,8 @@ def login_validation():
     if 'user_id' not in session:  # if user not logged-in
         email = request.form.get('email')
         passwd = request.form.get('password')
-        cursor.execute("""SELECT * FROM user_login WHERE email LIKE '{}' AND password LIKE '{}'""".format(email, passwd))
+        cursor.execute(
+            """SELECT * FROM user_login WHERE email LIKE '{}' AND password LIKE '{}'""".format(email, passwd))
         users = cursor.fetchall()
         if len(users) > 0:  # if user details matched in db
             session['user_id'] = users[0][0]
@@ -133,7 +134,7 @@ def logout():
     try:
         session.pop("user_id")  # delete the user_id in session (deleting session)
         return redirect('/')
-    except: # if already logged-out but in another tab still logged-in
+    except:  # if already logged-out but in another tab still logged-in
         return redirect('/')
 
 
@@ -145,9 +146,9 @@ def reset():
         cursor.execute("""select * from user_login where email LIKE '{}'""".format(email))
         userdata = cursor.fetchall()
         print(userdata)
-        if len(userdata)>0:
+        if len(userdata) > 0:
             try:
-                cursor.execute("""update user_login set password = '{}' where email = '{}'""".format(pswd,email))
+                cursor.execute("""update user_login set password = '{}' where email = '{}'""".format(pswd, email))
                 conn.commit()
                 flash("Password has been changed!!")
                 return redirect('/')
@@ -158,6 +159,25 @@ def reset():
             flash("Invalid email address!!")
             return redirect('/')
     else:
+        return redirect('/home')
+
+
+@app.route('/home/add_expense', methods=['POST'])
+def add_expense():
+    user_id = session['user_id']
+    if request.method == 'POST':
+        date = request.form.get('e_date')
+        expense = request.form.get('e_type')
+        amount = request.form.get('amount')
+        notes = request.form.get('notes')
+        try:
+            cursor.execute("""insert into user_expenses (user_id,pdate,expense,amount,pdescription) values 
+            ({}, '{}','{}',{},'{}')""".format(user_id, date, expense, amount, notes))
+            conn.commit()
+            flash("Added!!")
+        except:
+            flash("Something went wrong.")
+            return redirect("/home")
         return redirect('/home')
 
 

@@ -26,14 +26,13 @@
     </div>
      <div>
         {% for message in get_flashed_messages() %}
-         <div class="alert alert-warning alert-dismissible fade show" role="alert">
+         <div class="alert alert-warning alert-dismissible fade show" id="alert" role="alert">
                     {{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
          {% endfor %}
-
      </div>
 
      <div class="container">
@@ -104,46 +103,49 @@
                     </tr>
                   </tbody>
                 </table>
-
              </div>
              <div class="col-md-3">
                  <div class="card text-center">
                      <div class="card-body">
                          <p>Create a new expense</p>
-                         <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                            Add New Record
-                         </a>
-                         <div class="collapse" id="collapseExample">
-                              <div class="card card-body">
-                                <form>
-                                    <input type="date" class="form-control" name="date" placeholder="Select Date" required>
-<!--                                    <div class="input-group mb-3">-->
-                                      <select class="form-control" name="expense" required>
-                                        <option selected>Expense type...</option>
-                                        <option value="1">Earning</option>
-                                        <option value="2">Spend</option>
-                                        <option value="3">Investment</option>
-                                        <option value="4">Savings</option>
-                                      </select>
-<!--                                    </div>-->
-                                    <input type="number" class="form-control" name="amount" placeholder="Enter Amount" required>
-                                    <input type="text" class="form-control" name="description" placeholder="Enter notes">
-                                    <input type="submit" class="btn btn-primary btn-block" value="Save">
-                                </form>
-                              </div>
-                         </div>
+                         <button type="button" data-toggle="modal" data-target="#add_record" class="btn btn-primary">Add New Record</button>
+                         <div class="modal top fade mt-60" id="add_record" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+                            <div class="modal-dialog" style="width: 400px;">
+                            <div class="modal-content text-center">
+                                <div class="modal-header h5 text-white bg-success justify-content-center">
+                                    Add New  Expense Record
+                                </div>
+                                <div class="modal-body px-5">
+                                    <form class="form" method="post" action="/home/add_expense" >
+                                        <input type="date" class="form-control my-1" id="e_date" name="e_date" placeholder="Select Date" required>
+                                        <select class="form-control my-1" name="e_type" required>
+                                            <option selected hidden value="None">Expense type...</option>
+                                            <option value="Earning">Earning</option>
+                                            <option value="Spend">Spend</option>
+                                            <option value="Investment">Investment</option>
+                                            <option value="Saving">Saving</option>
+                                        </select>
+                                        <input type="number" class="form-control my-1" id="amount" name="amount" placeholder="Enter Amount" required>
+                                        <input type="text" class="form-control my-1" id="notes" name="notes" placeholder="Enter short note">
+                                        <input type="submit" class="btn my-2 btn-primary btn-block" id="add" name="add" value="Submit">
+                                    </form>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
                      </div>
-
                  </div>
-
              </div>
-
          </div>
-
-
      </div>
 
-
+    <script type="text/javascript">
+        setTimeout(function () {
+                    // Closing the alert
+                    $('#alert').alert('close');
+                }, 3000);
+    </script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
