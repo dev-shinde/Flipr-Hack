@@ -19,29 +19,9 @@ Creating a simple Expense Track app using Flask and Python
                 1. style.css
 
 ## Update
-1. Add new expense record functionality added
-2. Click Add New Record button, a model form will open, enter the details and submit
-3. click outside the form to close the form
-4. on successful update an alert message will appear for 3 seconds
+1. Homepage tiles and table data connected to database
+2. Add New Record shifted above the table 
+3. Two interactive charts(pie and bar) integrated for displaying stats of data same charts added in analysis page
 
-## Database table schema
+![img.png](img.png)![img_1.png](img_1.png)![img_2.png](img_2.png)
 
-![img_4.png](img_4.png)
-
-- Query to insert new record
-```
- insert into user_expenses (user_id,pdate,expense,amount,pdescription) values (1, '2022-12-25','Spend',12212,'Room rest');
-```
-![img_5.png](img_5.png)
-
-
-![img.png](img.png)
-![img_1.png](img_1.png)
-![img_2.png](img_2.png)
-![img_3.png](img_3.png)
-
-                    
-
-## Freeze requirements.txt
-save packages used in project, run below command to auto generate requirements.txt will all packages
-`pip freeze > requirements.txt`

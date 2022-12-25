@@ -40,7 +40,39 @@ def home():
     if 'user_id' in session:  # if user is logged-in
         cursor.execute("""select * from user_login where user_id = {} """.format(session['user_id']))
         userdata = cursor.fetchall()
-        return render_template('home.html', user_name=userdata[0][1])
+        cursor.execute(
+            """select * from user_expenses where user_id = {} order by pdate desc""".format(session['user_id']))
+        table_data = cursor.fetchall()  # list of tuples
+        cursor.execute(
+            """select expense, sum(amount) from user_expenses where user_id = {} group by expense order by expense""".format(
+                session['user_id']))
+        data = cursor.fetchall()
+        df = pd.DataFrame(data, columns=['Expense', 'Amount'])
+        graphJSON = None
+        if df.shape[0]>1:
+            fig = px.bar(x=df['Expense'], y=df['Amount'], color=df['Expense'],
+                         labels={'x': 'Expense Type', 'y': 'Amount(Rs)'}, height=280)
+            fig.update_layout(title_text='Expense Bar', title_x=0.5,margin=dict(l=2, r=2, t=30, b=2))
+            fig.update(layout_showlegend=True)
+
+            fig2 = px.pie(df, values='Amount', names='Expense', height=280)
+            fig2.update_layout(title_text='Pie Chart', title_x=0.5, margin=dict(l=2, r=2, t=30, b=2))
+
+            graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+            graphJSON2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
+
+        earning, spend, invest, saving = 0, 0, 0, 0
+        for exp, amount in data:
+            if exp == "Earning":
+                earning = amount
+            elif exp == "Investment":
+                invest = amount
+            elif exp == "Saving":
+                saving = amount
+            elif exp == "Spend":
+                spend = amount
+        return render_template('home.html', user_name=userdata[0][1], earning=earning, spend=spend, invest=invest, saving=saving,
+                               table_data=table_data[:3], graphJSON=graphJSON,graphJSON2=graphJSON2)
     else:  # if not logged-in
         return redirect('/')
 
@@ -102,19 +134,24 @@ def analysis():
     if 'user_id' in session:  # if already logged-in
         cursor.execute("""select * from user_login where user_id = {} """.format(session['user_id']))
         userdata = cursor.fetchall()
-        students = [['Savings', 24000, 'Sydney', 'Australia'],
-                    ['Spends', 20000, 'Coimbatore', 'India'],
-                    ['Investments', 15000, 'Coimbatore', 'India'],
-                    ['Earnings', 56000, 'Tokyo', 'Japan']]
+        cursor.execute(
+            """select expense, sum(amount) from user_expenses where user_id = {} group by expense order by expense""".format(
+                session['user_id']))
+        data = cursor.fetchall()
+        df = pd.DataFrame(data, columns=['Expense', 'Amount'])
 
-        # Convert list to dataframe and assign column values
-        df = pd.DataFrame(students,
-                          columns=['Expense', 'Amount', 'City', 'Country'],
-                          index=['a', 'b', 'c', 'd'])
+        if df.shape[0]>1:
+            fig = px.bar(x=df['Expense'], y=df['Amount'], color=df['Expense'],
+                         labels={'x': 'Expense Type', 'y': 'Amount(Rs)'}, height=280)
+            fig.update_layout(title_text='Expense Bar', title_x=0.5,margin=dict(l=2, r=2, t=30, b=2))
+            fig.update(layout_showlegend=True)
 
-        fig = px.bar(df, x='Expense', y='Amount', color='City', barmode='group')
-        graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        return render_template('analysis.html', user_name=userdata[0][1], graphJSON=graphJSON)
+            fig2 = px.pie(df, values='Amount', names='Expense', height=280)
+            fig2.update_layout(title_text='Pie Chart', title_x=0.5, margin=dict(l=2, r=2, t=30, b=2))
+
+            graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+            graphJSON2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
+            return render_template('analysis.html', user_name=userdata[0][1], graphJSON=graphJSON, graphJSON2=graphJSON2)
     else:  # if not logged-in
         return redirect('/')
 
@@ -164,21 +201,24 @@ def reset():
 
 @app.route('/home/add_expense', methods=['POST'])
 def add_expense():
-    user_id = session['user_id']
-    if request.method == 'POST':
-        date = request.form.get('e_date')
-        expense = request.form.get('e_type')
-        amount = request.form.get('amount')
-        notes = request.form.get('notes')
-        try:
-            cursor.execute("""insert into user_expenses (user_id,pdate,expense,amount,pdescription) values 
-            ({}, '{}','{}',{},'{}')""".format(user_id, date, expense, amount, notes))
-            conn.commit()
-            flash("Added!!")
-        except:
-            flash("Something went wrong.")
-            return redirect("/home")
-        return redirect('/home')
+    if 'user_id' in session:
+        user_id = session['user_id']
+        if request.method == 'POST':
+            date = request.form.get('e_date')
+            expense = request.form.get('e_type')
+            amount = request.form.get('amount')
+            notes = request.form.get('notes')
+            try:
+                cursor.execute("""insert into user_expenses (user_id,pdate,expense,amount,pdescription) values 
+                ({}, '{}','{}',{},'{}')""".format(user_id, date, expense, amount, notes))
+                conn.commit()
+                flash("Added!!")
+            except:
+                flash("Something went wrong.")
+                return redirect("/home")
+            return redirect('/home')
+    else:
+        return redirect('/')
 
 
 if __name__ == "__main__":
