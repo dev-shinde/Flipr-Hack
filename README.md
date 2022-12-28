@@ -13,15 +13,15 @@ Creating a simple Expense Track app using Flask and Python
              3. contact.html
              4. home.html
              5. analysis.html
-             6. profile.html
+             6. profile.
+             7. support.py # custom functions code reusability            
           3. static 
              1. css
                 1. style.css
 
 ## Update
-1. Homepage tiles and table data connected to database
-2. Add New Record shifted above the table 
-3. Two interactive charts(pie and bar) integrated for displaying stats of data same charts added in analysis page
-
-![img.png](img.png)![img_1.png](img_1.png)![img_2.png](img_2.png)
+![image](https://user-images.githubusercontent.com/40932902/209862772-d48ed764-f364-4fe7-b971-8bd74756372b.png)
+![image](https://user-images.githubusercontent.com/40932902/209862807-7e0872ab-16ed-452b-92ea-5ff7de70f4d1.png)
+![image](https://user-images.githubusercontent.com/40932902/209862840-a6ba2d7e-f0bd-45c3-8ee8-bdb62b7673f9.png)
+![image](https://user-images.githubusercontent.com/40932902/209862857-37d12704-75b8-4ef8-b717-cd2f9fef84bc.png)
 
