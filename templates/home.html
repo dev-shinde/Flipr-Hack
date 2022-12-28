@@ -8,12 +8,14 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Google Icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
         <title>Expense Tracker - Home</title>
     </head>
     <body class="page-bg">
      <div class="bg-nav d-flex flex-column flex-md-row align-items-center pb-0 mb-0 border-bottom">
-      <h5 class="m-3 mr-md-auto font-weight-normal">Expense Tracker - {{ user_name }}</h5>
+      <h5 class="m-3 mr-md-auto font-weight-normal"><a href="/" style="text-decoration : none">Expense Tracker - {{ user_name }}</a></h5>
 
       <nav class="m-2 my-md-0 mr-md-3">
         <a class="py-2 m-2 text-dark" href="/home">Home</a>
@@ -34,7 +36,9 @@
          {% endfor %}
      </div>
 
+     <!-- Main container-->
      <div class="container ">
+        <!-- Tiles row-->
          <div class="row my-2 ">
              <div class="col-md-3">
                  <div class="card deep-purple my-1">
@@ -69,21 +73,23 @@
                  </div>
              </div>
          </div>
+         <br>
 
+        <!-- Table records-->
          <div  class="row mt-3">
-             <div class="col-md-12">
+             <div class="col-md-8">
                  <div class="row">
                      <div class="col-md-4">
-                         <h4>Latest 3 Records</h4>
+                         <h4>Latest 5 Records</h4>
                      </div>
                      <div class="col-md-8 text-right">
-
                         <button type="button" data-toggle="modal" data-target="#add_record" class="btn btn-primary btn-sm">Add New Record</button>
                      </div>
-                 </div>
-                 <div class="modal top fade mt-60" id="add_record" tabindex="-1" aria-labelledby="exampleModalLabel"
+
+                     <!-- Add new record modal-->
+                     <div class="modal top fade mt-60" id="add_record" tabindex="-1" aria-labelledby="exampleModalLabel"
                             aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
-                            <div class="modal-dialog" style="width: 400px;">
+                        <div class="modal-dialog" style="width: 400px;">
                             <div class="modal-content text-center">
                                 <div class="modal-header h5 text-white bg-success justify-content-center">
                                     Add New  Expense Record
@@ -104,41 +110,165 @@
                                     </form>
                                 </div>
                             </div>
-                            </div>
                         </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-md-12">
+                         <table class="table table-dark">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Date</th>
+                              <th scope="col">Expense</th>
+                              <th scope="col">Amount</th>
+                              <th scope="col">Note</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {% for row in table_data %}
+                            <tr>
+                              <th scope="row">{{ loop.index }}</th>
+                              <td>{{ row[2] }}</td>
+                              <td>{{ row[3] }}</td>
+                              <td>{{ row[4] }}</td>
+                              <td>{{ row[5] }}</td>
+                            </tr>
+                          {% endfor %}
+                          </tbody>
+                         </table>
+                     </div>
+                 </div>
+             </div>
 
-                 <table class="table table-dark">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Date</th>
-                      <th scope="col">Expense</th>
-                      <th scope="col">Amount</th>
-                      <th scope="col">Note</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {% for row in table_data %}
-                        <tr>
-                          <th scope="row">{{ loop.index }}</th>
-                          <td>{{ row[2] }}</td>
-                          <td>{{ row[3] }}</td>
-                          <td>{{ row[4] }}</td>
-                          <td>{{ row[5] }}</td>
-                        </tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
+            <!--  bar chart-->
+             <div class="col-md-4 chart_border">
+<!--                 <div class="card card-body bg-primary">-->
+                    <div id="bar" class="chart"></div>
+<!--                 </div>-->
              </div>
          </div>
+         <br>
+         <br>
+         <div class="row ">
+             <div class="col-md-7 chart_border">
+                 <div id="stack" class="chart m-1"></div>
+             </div>
+              <div class="col-md-5">
+                  <div class="row m-1">
+                      <div class="col-sm-12">
+                          <div class="card card-body m-1 p-1 panel list">
+                              <h4 align="center">Monthly Record (₹)</h4>
+                              <li>
+                                  <h5 class="text-warning">Month</h5>
+                                  <span><h6>Income</h6></span>
+                                  <span><h6>Spend</h6></span>
+                                  <span><h6>Invest</h6></span>
+                                  <span><h6>Saving</h6></span>
+                              </li>
+
+                              {% for month in monthly_data %}
+                              <li>
+                                  <h6>{{ month['Month'] }}</h6>
+                                  <span>{{ month['Earning'] }}</span>
+                                  <span>{{ month['Spend'] }}</span>
+                                  <span>{{ month['Investment'] }}</span>
+                                  <span>{{ month['Saving'] }}</span>
+                              </li>
+                              {% endfor %}
+                          </div>
+                      </div>
+                  </div>
+              </div>
+         </div>
+         <br>
+         <br>
+
          <div class="row">
-             <div class="col-md-7">
-                 <div id="chart" class="chart"></div>
-             </div>
-             <div class="col-md-5">
-                 <div id="chart2" class="chart"></div>
+             <div class="sales">
+                 {% for data in card_data %}
+                 <div class="text-center">
+                    <h5 class="p-0 m-1">{{ data['head'] }}</h5>
+                    <h1>{{ data['main'] }}</h1>
+                    <small>{{ data['msg'] }}</small>
+                 </div>
+                 {% endfor %}
+<!--                 <div class="text-center">-->
+<!--                    <h5 class="p-0 m-1">₹4000</h5>-->
+<!--                    <h1>Friday</h1>-->
+<!--                    <small>Highest spent on this day</small>-->
+<!--                 </div>-->
+<!--                 <div class="text-center">-->
+<!--                     <h5 class="p-0 m-1">Income</h5>-->
+<!--                     <h1>₹4000</h1>-->
+<!--                     <small>Per day avg income</small>-->
+<!--                 </div>-->
+<!--                 <div class="text-center">-->
+<!--                    <h5 class="p-0 m-1">Spend</h5>-->
+<!--                    <h1>30.02%</h1>-->
+<!--                    <small>Monthly spend % of income</small>-->
+<!--                 </div>-->
+<!--                 <div class="text-center">-->
+<!--                    <h5 class="p-0 m-1">Saving</h5>-->
+<!--                    <h1>₹243K</h1>-->
+<!--                    <small>Monthly Saving</small>-->
+<!--                 </div>-->
              </div>
          </div>
+         <br>
+         <br>
+
+         <div class="row">
+             <div class="col-md-4">
+                 <div class="goals">
+                    <div class="goal-panel goal">
+                        <span class="material-icons">
+                            check_circle
+                        </span>
+                        <div>
+                            <div class="goal-title">
+                                <h5>Monthly Income</h5>
+                                <h4>2,450$</h4>
+                            </div>
+                            <small>Your monthly income has been increased</small>
+                    </div>
+                    </div>
+                    <div class="goal-panel goal">
+                        <span class="material-icons">
+                            check_circle
+                        </span>
+                        <div>
+                            <div class="goal-title">
+                                <h5>Monthly Spend</h5>
+                                <h4>2,450$</h4>
+                            </div>
+                            <small>Your monthly spend has been decreased</small>
+                    </div>
+                    </div>
+                    <div class="goal-panel goal">
+                        <span class="material-icons">
+                            check_circle
+                        </span>
+                        <div>
+                            <div class="goal-title">
+                                <h5>Monthly Invest</h5>
+                                <h4>2,540$</h4>
+                            </div>
+                            <small>Monthly investment has been increased</small>
+                        </div>
+                    </div>
+                 </div>
+             </div>
+             <div class="col-md-8 chart_border">
+                 <div id="line" class="chart m-1"></div>
+             </div>
+         </div>
+         <br>
+         <br>
+         <div class="row">
+            <div id="sunburst" class="chart"></div>
+         </div>
+
          <br>
          <br>
          <br>
@@ -163,9 +293,13 @@
     </body>
 
     <script type='text/javascript'>
-      var graphs = {{graphJSON | safe}};
-      var graphs2 = {{graphJSON2 | safe}};
-      Plotly.plot('chart',graphs,{});
-      Plotly.plot('chart2',graphs2,{});
+      var graphs = {{bar | safe}};
+      var graphs2 = {{pie | safe}};
+      var graphs3 = {{line | safe}};
+      var graphs4 = {{stack_bar | safe}};
+      Plotly.plot('bar',graphs,{});
+      Plotly.plot('sunburst',graphs2,{});
+      Plotly.plot('line',graphs3,{});
+      Plotly.plot('stack',graphs4,{});
     </script>
 </html>

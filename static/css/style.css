@@ -269,3 +269,120 @@ form.contFrm {
   }
 }
 
+
+.chart_border {
+  border: 2px solid white;
+  border-radius: 40px 10px;
+}
+
+
+.panel {
+    background: linear-gradient(
+        90deg, #262a4f, #122442
+    );
+    box-shadow:
+    -5px -5px 8px #293063,
+    5px 5px 8px #11163c;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+
+.list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2em;
+}
+
+.list span {
+    color: #ea335d;
+}
+
+.list h4, h6 {
+    color: #ffffff;
+}
+
+
+/* Sales panel */
+.sales {
+    grid-column-start: span 3;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 2em;
+}
+
+.sales > div {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    padding: 1em;
+}
+
+.sales h1 {
+    margin: 0.5em 0;
+}
+
+.sales small{
+    color: #fff;
+}
+
+.sales > div:nth-child(even) {
+    background: linear-gradient(
+        0deg, #b52b4b, #ea335d
+    );
+}
+
+.sales > div:nth-child(odd) {
+    background: linear-gradient(
+        0deg, #178add, #03dcee
+    );
+}
+
+
+/* goal panel */
+
+.goal {
+    padding: 1em;
+}
+
+.goals,
+.goal,
+.goal-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.goal-title h4:nth-child(1) {
+    margin: 0 2em 0 0;
+}
+
+.goal-title {
+    margin-bottom: 0.5em;
+}
+
+.goals {
+    flex-direction: column;
+}
+
+.goal {
+    margin: 1em 0;
+}
+
+.goal span {
+    color: #03dcee;
+    margin-right: 0.5em;
+    font-size: 2em;
+}
+
+.goal-panel {
+    color:#ffff;
+    background: linear-gradient(
+        90deg, #192f37, #264652
+    );
+    box-shadow:
+    -5px -5px 8px #264652,
+    5px 5px 8px #192f37;
+    border-radius: 15px;
+    overflow: hidden;
+}
