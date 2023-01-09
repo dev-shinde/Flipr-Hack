@@ -49,7 +49,6 @@ def reset():
         email = request.form.get('femail')
         pswd = request.form.get('pswd')
         userdata = support.execute_query('search', """select * from user_login where email LIKE '{}'""".format(email))
-        print(userdata)
         if len(userdata) > 0:
             try:
                 query = """update user_login set password = '{}' where email = '{}'""".format(pswd, email)
@@ -250,9 +249,45 @@ def profile():
     if 'user_id' in session:  # if logged-in
         query = """select * from user_login where user_id = {} """.format(session['user_id'])
         userdata = support.execute_query('search', query)
-        return render_template('profile.html', user_name=userdata[0][1])
+        return render_template('profile.html', user_name=userdata[0][1], email=userdata[0][2])
     else:  # if not logged-in
         return redirect('/')
+
+
+@app.route("/updateprofile", methods=['POST'])
+def update_profile():
+    name = request.form.get('name')
+    email = request.form.get("email")
+    query = """select * from user_login where user_id = {} """.format(session['user_id'])
+    userdata = support.execute_query('search', query)
+    query = """select * from user_login where email = "{}" """.format(email)
+    email_list = support.execute_query('search', query)
+    if name != userdata[0][1] and email != userdata[0][2] and len(email_list) == 0:
+        query = """update user_login set username = '{}', email = '{}' where user_id = '{}'""".format(name, email,
+                                                                                                    session['user_id'])
+        support.execute_query('insert', query)
+        flash("Name and Email updated!!")
+        return redirect('/profile')
+    elif name != userdata[0][1] and email != userdata[0][2] and len(email_list) > 0:
+        flash("Email already exists, try another!!")
+        return redirect('/profile')
+    elif name == userdata[0][1] and email != userdata[0][2] and len(email_list) == 0:
+        query = """update user_login set email = '{}' where user_id = '{}'""".format(email,session['user_id'])
+        support.execute_query('insert', query)
+        flash("Email updated!!")
+        return redirect('/profile')
+    elif name == userdata[0][1] and email != userdata[0][2] and len(email_list) > 0:
+        flash("Email already exists, try another!!")
+        return redirect('/profile')
+
+    elif name != userdata[0][1] and email == userdata[0][2]:
+        query = """update user_login set username = '{}' where user_id = '{}'""".format(name, session['user_id'])
+        support.execute_query('insert', query)
+        flash("Name updated!!")
+        return redirect("/profile")
+    else:
+        flash("No Change!!")
+        return redirect("/profile")
 
 
 @app.route('/logout')

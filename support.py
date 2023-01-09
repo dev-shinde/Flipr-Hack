@@ -202,7 +202,6 @@ def get_monthly_data(df, year=datetime.datetime.today().year, res='int'):
     """
     temp = pd.DataFrame()
     d_year = df.groupby('Year').get_group(year)[['Expense', 'Amount', 'Month']]
-    print("Current year: ", year)
     d_month = d_year.groupby("Month")
     for month in list(d_month.groups.keys())[::-1][:3]:
         dexp = d_month.get_group(month).groupby('Expense').sum().reset_index()

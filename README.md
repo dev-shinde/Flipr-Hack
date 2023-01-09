@@ -20,7 +20,5 @@ Creating a simple Expense Track app using Flask and Python
                 1. style.css
 
 ## Update
-1. Some changes in Home page
-2. Analysis page designed and connected with database
-![img.png](img.png)
+Profile update feature added
 
