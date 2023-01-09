@@ -47,7 +47,18 @@
                     <input type="submit" class="btn btn-primary btn-block btn-lg" value="Login">
                   </form>
                 <!-- Reset Password -->
-                <p class="mt-2" data-toggle="modal" data-target="#password_reset"><a href="#password_reset">Forget Password?</a></p>
+                <div class="row">
+                    <div class="col my-1">
+                            <div class="form-check m-1">
+                            <input class="form-check-input my-2" type="checkbox" value="" id="form2Example31"/>
+                            <label class="form-check-label text-primary" for="form2Example31"> Remember me </label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <p class="mt-2" data-toggle="modal" data-target="#password_reset"><a href="#password_reset">Forget Password?</a></p>
+                    </div>
+                </div>
+
                 <!-- Modal -->
                 <div class="modal top fade" id="password_reset" tabindex="-1" aria-labelledby="exampleModalLabel"
                  aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
@@ -62,14 +73,6 @@
                             </p>
                             <form class="form" method="post" action="/reset">
                                 <input type="email" class="form-control " id="femail" name="femail" placeholder="Enter registered email" required>
-<!--                                <div class="row">-->
-<!--                                    <div class="col-md-6">-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-6">-->
-<!--                                        <input type="submit" class="btn btn-primary my-2 btn-sm " id="otpbtn" name="reset2" onclick="disableButton(this,femail,otp,reset)" value="Send OTP">-->
-<!--                                    </div>-->
-<!--                                </div>-->
-
                                 <input type="password" class="form-control my-1"  name="pswd" placeholder="Enter New Password" required><br>
                                 <input type="submit" class="btn my-2 btn-primary btn-block" id="reset" name="reset" value="Reset">
 

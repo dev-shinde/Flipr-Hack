@@ -369,8 +369,14 @@ form.contFrm {
     margin: 1em 0;
 }
 
-.goal span {
-    color: #03dcee;
+.icon-color-up {
+    color: #03ee2e;
+    margin-right: 0.5em;
+    font-size: 2em;
+}
+
+.icon-color-down {
+    color: #d02727;
     margin-right: 0.5em;
     font-size: 2em;
 }
@@ -385,4 +391,11 @@ form.contFrm {
     5px 5px 8px #192f37;
     border-radius: 15px;
     overflow: hidden;
+}
+
+.body2 {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    background: #172042;
 }

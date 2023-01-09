@@ -7,6 +7,7 @@
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
         <!-- Bootstrap CSS -->
+        <link href="/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!-- Google Icons -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -44,7 +45,7 @@
                  <div class="card deep-purple my-1">
                      <div class="card-body ">
                          <h5 class="text-center">Total Earnings</h5>
-                         <h2 class="text-center">Rs {{ earning }}</h2>
+                         <h2 class="text-center">₹ {{ earning }}</h2>
                      </div>
                  </div>
              </div>
@@ -52,7 +53,7 @@
                  <div class="card alive my-1">
                      <div class="card-body ">
                          <h5 class="text-center">Total Spends</h5>
-                         <h2 class="text-center">Rs {{ spend }}</h2>
+                         <h2 class="text-center">₹ {{ spend }}</h2>
                      </div>
                  </div>
              </div>
@@ -60,7 +61,7 @@
                  <div class="card citrus my-1">
                      <div class="card-body ">
                          <h5 class="text-center">Total Investments</h5>
-                         <h2 class="text-center">Rs {{ invest }}</h2>
+                         <h2 class="text-center">₹ {{ invest }}</h2>
                      </div>
                  </div>
              </div>
@@ -68,14 +69,15 @@
                  <div class="card green my-1">
                      <div class="card-body ">
                          <h5 class="text-center">Total Savings</h5>
-                         <h2 class="text-center">Rs {{ saving }}</h2>
+                         <h2 class="text-center">₹ {{ saving }}</h2>
                      </div>
                  </div>
              </div>
          </div>
          <br>
 
-        <!-- Table records-->
+
+<!--         Table records-->
          <div  class="row mt-3">
              <div class="col-md-8">
                  <div class="row">
@@ -105,7 +107,44 @@
                                             <option value="Saving">Saving</option>
                                         </select>
                                         <input type="number" class="form-control my-1" id="amount" name="amount" placeholder="Enter Amount" required>
-                                        <input type="text" class="form-control my-1" id="notes" name="notes" placeholder="Enter short note">
+                                        <select class="form-control my-1" name="notes" required>
+                                            <option selected hidden value="None">Select...</option>
+                                            <option value="Earning">Earning</option>
+                                            <option value="Spend">Spend</option>
+                                            <option value="Investment">Investment</option>
+                                            <option value="Saving">Saving</option>
+                                            <option value="Salary">Salary</option>
+                                            <option value="Bonus">Bonus</option>
+                                            <option value="Rental Income">Rental Income</option>
+                                            <option value="Interest Income">Interest Income</option>
+                                            <option value="Dividend Income">Dividend Income</option>
+                                            <option value="Commission">Commission</option>
+                                            <option value="Gifts">Gifts</option>
+                                            <option value="House Rent">House Rent</option>
+                                            <option value="Shopping">Shopping</option>
+                                            <option value="Groceries">Groceries</option>
+                                            <option value="Goods">Goods</option>
+                                            <option value="Travel">Travel</option>
+                                            <option value="Fuel">Fuel</option>
+                                            <option value="EMI">EMI</option>
+                                            <option value="Bills">Bills</option>
+                                            <option value="Gifts">Gifts</option>
+                                            <option value="Medical">Medical</option>
+                                            <option value="Fees">Fees</option>
+                                            <option value="Vacation">Vocation</option>
+                                            <option value="Mutual Funds">Mutual Funds</option>
+                                            <option value="Bonds">Bonds</option>
+                                            <option value="ETF">ETF</option>
+                                            <option value="Fixed Deposit">Fixed Deposit</option>
+                                            <option value="Retirement Plan">Retirement Plan</option>
+                                            <option value="Real Estate">Real Estate</option>
+                                            <option value="Home Purchase">Home Purchase</option>
+                                            <option value="Child Saving">Child Saving</option>
+                                            <option value="Vacation">Vacation</option>
+                                            <option value="Health Account">Health Account</option>
+                                            <option value="Bank">Bank</option>
+                                            <option value="Others">Others</option>
+                                        </select>
                                         <input type="submit" class="btn my-2 btn-primary btn-block" id="add" name="add" value="Submit">
                                     </form>
                                 </div>
@@ -140,12 +179,15 @@
                      </div>
                  </div>
              </div>
+             {% if df_size==0 %}
+         <div>
+             <h3>No records found, seems you are a new user</h3>
+         </div>
+         {% else %}
 
             <!--  bar chart-->
              <div class="col-md-4 chart_border">
-<!--                 <div class="card card-body bg-primary">-->
                     <div id="bar" class="chart"></div>
-<!--                 </div>-->
              </div>
          </div>
          <br>
@@ -161,10 +203,10 @@
                               <h4 align="center">Monthly Record (₹)</h4>
                               <li>
                                   <h5 class="text-warning">Month</h5>
-                                  <span><h6>Income</h6></span>
-                                  <span><h6>Spend</h6></span>
-                                  <span><h6>Invest</h6></span>
-                                  <span><h6>Saving</h6></span>
+                                  <span>Income</span>
+                                  <span>Spend</span>
+                                  <span>Invest</span>
+                                  <span>Saving</span>
                               </li>
 
                               {% for month in monthly_data %}
@@ -181,6 +223,7 @@
                   </div>
               </div>
          </div>
+
          <br>
          <br>
 
@@ -193,26 +236,6 @@
                     <small>{{ data['msg'] }}</small>
                  </div>
                  {% endfor %}
-<!--                 <div class="text-center">-->
-<!--                    <h5 class="p-0 m-1">₹4000</h5>-->
-<!--                    <h1>Friday</h1>-->
-<!--                    <small>Highest spent on this day</small>-->
-<!--                 </div>-->
-<!--                 <div class="text-center">-->
-<!--                     <h5 class="p-0 m-1">Income</h5>-->
-<!--                     <h1>₹4000</h1>-->
-<!--                     <small>Per day avg income</small>-->
-<!--                 </div>-->
-<!--                 <div class="text-center">-->
-<!--                    <h5 class="p-0 m-1">Spend</h5>-->
-<!--                    <h1>30.02%</h1>-->
-<!--                    <small>Monthly spend % of income</small>-->
-<!--                 </div>-->
-<!--                 <div class="text-center">-->
-<!--                    <h5 class="p-0 m-1">Saving</h5>-->
-<!--                    <h1>₹243K</h1>-->
-<!--                    <small>Monthly Saving</small>-->
-<!--                 </div>-->
              </div>
          </div>
          <br>
@@ -221,61 +244,83 @@
          <div class="row">
              <div class="col-md-4">
                  <div class="goals">
-                    <div class="goal-panel goal">
-                        <span class="material-icons">
-                            check_circle
-                        </span>
-                        <div>
-                            <div class="goal-title">
-                                <h5>Monthly Income</h5>
-                                <h4>2,450$</h4>
+                     <h5>Monthly Goals <h6>(w.r.t. last month)</h6></h5>
+                     {% for goal in goals %}
+                        <div class="goal-panel goal">
+
+                                {% if goal['status']=='increased' %}
+                                    {% if goal['type']=='Spend' %}
+                            <span class="material-icons icon-color-down">
+                                            thumb_down
+                                    {% else %}
+                            <span class="material-icons icon-color-up">
+                                        thumb_up
+                                    {% endif %}
+                                {% else %}
+                                    {% if goal['type']=='Spend' %}
+                            <span class="material-icons icon-color-up">
+                                            thumb_up
+                                    {% else %}
+                            <span class="material-icons icon-color-down">
+                                        thumb_down
+                                    {% endif %}
+                                {% endif %}
+                            </span>
+                            <div>
+                               <div class="goal-title">
+                                    <h6>{{ goal['type'] }}</h6>
+                                    <h5>{{ goal['value'] }}</h5>
+                               </div>
+                                <small>{{ goal['status'] }} by {{ goal['percent'] }}% in this month.</small>
                             </div>
-                            <small>Your monthly income has been increased</small>
-                    </div>
-                    </div>
-                    <div class="goal-panel goal">
-                        <span class="material-icons">
-                            check_circle
-                        </span>
-                        <div>
-                            <div class="goal-title">
-                                <h5>Monthly Spend</h5>
-                                <h4>2,450$</h4>
-                            </div>
-                            <small>Your monthly spend has been decreased</small>
-                    </div>
-                    </div>
-                    <div class="goal-panel goal">
-                        <span class="material-icons">
-                            check_circle
-                        </span>
-                        <div>
-                            <div class="goal-title">
-                                <h5>Monthly Invest</h5>
-                                <h4>2,540$</h4>
-                            </div>
-                            <small>Monthly investment has been increased</small>
                         </div>
-                    </div>
+                     {% endfor %}
                  </div>
              </div>
-             <div class="col-md-8 chart_border">
-                 <div id="line" class="chart m-1"></div>
+             <div class="col-md-8 goal-panel">
+                 <div class="row justify-content-center">
+                     <h3 class="text-center text-white align-center">Data in Pie Chart</h3>
+                 </div>
+                 <div class="row my-3">
+                     <div class="col-md-4 d-flex justify-content-around">
+                         <div id="pie11" class="chart"></div>
+                     </div>
+                     <div class="col-md-4 d-flex justify-content-around">
+                         <div id="pie22" class="chart"></div>
+                     </div>
+                     <div class="col-md-4 d-flex justify-content-around">
+                         <div id="pie55" class="chart"></div>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-md-4 d-flex justify-content-around">
+                         <div id="pie33" class="chart"></div>
+                     </div>
+                     <div class="col-md-4 d-flex justify-content-around">
+                         <div id="pie44" class="chart"></div>
+                     </div>
+                     <div class="col-md-4 d-flex justify-content-around">
+                         <div id="pie66" class="chart"></div>
+                     </div>
+                 </div>
              </div>
          </div>
-         <br>
-         <br>
-         <div class="row">
-            <div id="sunburst" class="chart"></div>
-         </div>
 
-         <br>
-         <br>
-         <br>
-         <br>
+         {% endif %}
          <br>
          <br>
      </div>
+
+     <div class="container">
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <div class="col-md-4 d-flex align-items-center">
+          <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+            <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+          </a>
+          <span class="text-muted">&copy; 2022 Expense Tracker, Inc</span>
+        </div>
+      </footer>
+    </div>
 
     <script type="text/javascript">
         setTimeout(function () {
@@ -294,12 +339,23 @@
 
     <script type='text/javascript'>
       var graphs = {{bar | safe}};
-      var graphs2 = {{pie | safe}};
-      var graphs3 = {{line | safe}};
-      var graphs4 = {{stack_bar | safe}};
       Plotly.plot('bar',graphs,{});
-      Plotly.plot('sunburst',graphs2,{});
-      Plotly.plot('line',graphs3,{});
+
+      var graphs4 = {{stack_bar | safe}};
       Plotly.plot('stack',graphs4,{});
+
+      var pie_graph1 = {{pie1 | safe}};
+      var pie_graph2 = {{pie2 | safe}};
+      var pie_graph3 = {{pie3 | safe}};
+      var pie_graph4 = {{pie4 | safe}};
+      var pie_graph5 = {{pie5 | safe}};
+      var pie_graph6 = {{pie6 | safe}};
+      Plotly.plot('pie11',pie_graph1,{});
+      Plotly.plot('pie22',pie_graph2,{});
+      Plotly.plot('pie55',pie_graph5,{});
+      Plotly.plot('pie33',pie_graph3,{});
+      Plotly.plot('pie44',pie_graph4,{});
+      Plotly.plot('pie66',pie_graph6,{});
+
     </script>
 </html>

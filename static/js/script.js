@@ -34,3 +34,7 @@ var config = {responsive: true}
 Plotly.newPlot('myDiv', data, layout, config );
 
 
+
+$(document).ready(function(){
+    $(".multi_select").selectpicker();
+})

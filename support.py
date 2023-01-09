@@ -62,6 +62,7 @@ def generate_df(df):
     :param df:
     :return:
     """
+    df = df
     df['Date'] = pd.to_datetime(df['Date'])
     df['Year'] = df['Date'].dt.year
     df['Month_name'] = df['Date'].dt.month_name()
@@ -70,6 +71,21 @@ def generate_df(df):
     df['Day'] = df['Date'].dt.day
     df['Week'] = df['Date'].dt.isocalendar().week
     return df
+
+
+def num2MB(num):
+    """
+        num: int, float
+        it will return values like thousands(10K), Millions(10M),Billions(1B)
+    """
+    if num < 1000:
+        return int(num)
+    if 1000 <= num < 1000000:
+        return f'{float("%.2f" % (num / 1000))}K'
+    elif 1000000 <= num < 1000000000:
+        return f'{float("%.2f" % (num / 1000000))}M'
+    else:
+        return f'{float("%.2f" % (num / 1000000000))}B'
 
 
 def top_tiles(df=None):
@@ -83,7 +99,7 @@ def top_tiles(df=None):
         tiles = {'Earning': 0, 'Investment': 0, 'Saving': 0, 'Spend': 0}
         for i in list(tiles_data.index):
             try:
-                tiles[i] = tiles_data.loc[i][0]
+                tiles[i] = num2MB(tiles_data.loc[i][0])
             except:
                 pass
         return tiles['Earning'], tiles['Spend'], tiles['Investment'], tiles['Saving']
@@ -148,32 +164,47 @@ def generate_Graph(df=None):
     return None
 
 
-def num2MB(num):
-    """
-        num: int, float
-        it will return values like thousands(10K), Millions(10M),Billions(1B)
-    """
-    if num < 1000:
-        return int(num)
-    if 1000 <= num < 1000000:
-        return f'{float("%.2f" % (num / 1000))}K'
-    elif 1000000 <= num < 1000000000:
-        return f'{float("%.2f" % (num / 1000000))}M'
-    else:
-        return f'{float("%.2f" % (num / 1000000000))}B'
+def makePieChart(df=None, expense='Earning', names='Note', values='Amount', hole=0.5,
+                 color_discrete_sequence=px.colors.sequential.RdBu, size=300, textposition='inside',
+                 textinfo='percent+label', margin=2):
+    fig = px.pie(df[df['Expense'] == expense], names=names, values=values, hole=hole,
+                 color_discrete_sequence=color_discrete_sequence, height=size, width=size)
+    fig.update_traces(textposition=textposition, textinfo=textinfo)
+    fig.update_layout(annotations=[dict(text=expense, y=0.5, font_size=20, font_color='white', showarrow=False)])
+    fig.update_layout(margin=dict(l=margin, r=margin, t=margin, b=margin),
+                      paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+    fig.update(layout_showlegend=False)
+    return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
 
-def get_monthly_data(df, year=datetime.datetime.today().year):
+def meraBarChart(df=None, x=None, y=None, color=None, x_label=None, y_label=None, height=None, width=None,
+                 show_legend=False, show_xtick=True, show_ytick=True, x_tickangle=0, y_tickangle=0, barmode='relative'):
+    bar = px.bar(data_frame=df, x=x, y=y, color=color, template="plotly_dark", barmode=barmode,
+                 labels={'x': x_label, 'y': y_label}, height=height, width=width)
+    bar.update(layout_showlegend=show_legend)
+    bar.update_layout(
+        margin=dict(l=2, r=2, t=2, b=2),
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)')
+    bar.update_layout(xaxis=dict(showticklabels=show_xtick, tickangle=x_tickangle),
+                      yaxis=dict(showticklabels=show_ytick, tickangle=y_tickangle))
+
+    return json.dumps(bar, cls=plotly.utils.PlotlyJSONEncoder)
+
+
+def get_monthly_data(df, year=datetime.datetime.today().year, res='int'):
     """
     Data for Records record table
+    :param res:
     :param df: Dataframe
     :param year: present year
     :return: list of dictionary
     """
     temp = pd.DataFrame()
     d_year = df.groupby('Year').get_group(year)[['Expense', 'Amount', 'Month']]
+    print("Current year: ", year)
     d_month = d_year.groupby("Month")
-    for month in list(d_month.groups.keys())[::-1][:5]:
+    for month in list(d_month.groups.keys())[::-1][:3]:
         dexp = d_month.get_group(month).groupby('Expense').sum().reset_index()
         for row in range(dexp.shape[0]):
             temp = temp.append(
@@ -182,12 +213,15 @@ def get_monthly_data(df, year=datetime.datetime.today().year):
     month_name = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: "July", 8: 'August',
                   9: "September", 10: "October", 11: "November", 12: "December"}
     ls = []
-    for month in list(d_month.groups.keys())[::-1][:5]:
+    for month in list(d_month.groups.keys())[::-1][:3]:
         m = {}
         s = temp[temp['Month'] == month]
         m['Month'] = month_name[month]
         for i in range(s.shape[0]):
-            m[s.iloc[i]['Expense']] = num2MB(int(s.iloc[i]['Amount']))
+            if res == 'int':
+                m[s.iloc[i]['Expense']] = int(s.iloc[i]['Amount'])
+            else:
+                m[s.iloc[i]['Expense']] = num2MB(int(s.iloc[i]['Amount']))
         ls.append(m)
     return ls
 
@@ -212,15 +246,16 @@ def sort_summary(df):
     amount = max(h_amount)
     month = h_month[h_amount.index(amount)]
     year = h_year[h_amount.index(amount)]
-    datas.append({'head': "₹"+str(num2MB(amount)), 'main': f"{month}'{str(year)[2:]}", 'msg': "Highest income in a month"})
+    datas.append(
+        {'head': "₹" + str(num2MB(amount)), 'main': f"{month}'{str(year)[2:]}", 'msg': "Highest income in a month"})
 
     # per day avg income
     per_day_income = df[df['Expense'] == 'Earning']['Amount'].sum() / df['Date'].nunique()
-    datas.append({'head': 'Income', 'main': "₹"+str(num2MB(per_day_income)), 'msg': "You earn everyday"})
+    datas.append({'head': 'Income', 'main': "₹" + str(num2MB(per_day_income)), 'msg': "You earn everyday"})
 
     # per week avg spend
     per_week_saving = df[df['Expense'] == 'Saving'].groupby('Week').sum()['Amount'].mean()
-    datas.append({'head': 'Saving', 'main': "₹"+str(num2MB(per_week_saving)), 'msg': "You save every week"})
+    datas.append({'head': 'Saving', 'main': "₹" + str(num2MB(per_week_saving)), 'msg': "You save every week"})
 
     # per month income
     avg_earn = df[df['Expense'] == 'Earning'].groupby('Month').sum()['Amount'].reset_index()['Amount'].mean()
@@ -236,3 +271,127 @@ def sort_summary(df):
     datas.append({'head': 'Invest', 'main': f"₹{round(every_minute_invest, 2)}", 'msg': "You invest every minute"})
 
     return datas
+
+
+def expense_goal(df):
+    """
+    :param df: Dataframe
+    :return: list of dictionary
+    """
+    goal_ls = []
+    for expense in list(df['Expense'].unique()):
+        dic = {'type': expense}
+        a = get_monthly_data(df, res='int')
+        x = []
+        for i in a[:2]:
+            x.append(i[expense])
+        first, second = x[0], x[1]
+        diff = int(first) - int(second)
+        percent = round((diff / second) * 100, 1)
+        if percent > 0:
+            dic['status'] = 'increased'
+        else:
+            dic['status'] = 'decreased'
+        dic['percent'] = abs(percent)
+        dic['value'] = "₹" + num2MB(x[0])
+        goal_ls.append(dic)
+    return goal_ls
+
+
+# --------------- Analysis -----------------
+def meraPie(df=None, names=None, values=None, color=None, width=None, height=None, hole=None, hole_text=None,
+            margin=None, hole_font=10):
+    fig = px.pie(data_frame=df, names=names, values=values, color=color, hole=hole, width=width, height=height)
+    fig.update_traces(textposition='inside', textinfo='percent+label')
+    fig.update_layout(annotations=[dict(text=hole_text, y=0.5, font_size=hole_font, showarrow=False)])
+    fig.update_layout(margin=margin, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+    fig.update(layout_showlegend=False)
+    # fig.update_layout(title='Total Balance', title_font_size=15, title_font_color='green')
+    return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+
+def meraLine(df=None, x=None, y=None, color=None, slider=True, title=None, height=180, width=None, show_legend=True):
+    # Line Chart
+    line = px.line(data_frame=df, x=x, y=y, color=color, template="plotly_dark", height=height, width=width)
+    line.update_xaxes(rangeslider_visible=slider)
+    line.update(layout_showlegend=show_legend)
+    line.update_layout(title_text=title, title_x=0.,
+                       legend=dict(
+                           orientation="h",
+                           yanchor="bottom",
+                           y=1.02,
+                           xanchor="right",
+                           x=1
+                       ),
+                       margin=dict(l=2, r=2, t=2, b=2),
+                       paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
+                       )
+    return json.dumps(line, cls=plotly.utils.PlotlyJSONEncoder)
+
+
+def meraScatter(df=None, x=None, y=None, color=None, size=None, slider=True, title=None, height=180, width=None,
+                legend=False):
+    scatter = px.scatter(data_frame=df, x=x, y=y, color=color, size=size, template="plotly_dark", height=height,
+                         width=width)
+    scatter.update_xaxes(rangeslider_visible=slider)
+    scatter.update(layout_showlegend=legend)
+    scatter.update_layout(xaxis={'visible': False})
+    scatter.update_layout(title_text=title, title_x=0.5,
+                          legend=dict(
+                              orientation="h",
+                              yanchor="bottom",
+                              y=1.02,
+                              xanchor="left",
+                              x=1
+                          ),
+                          margin=dict(l=2, r=2, t=2, b=2),
+                          paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
+                          )
+    return json.dumps(scatter, cls=plotly.utils.PlotlyJSONEncoder)
+
+
+def meraHeatmap(df=None, x=None, y=None, text_auto=True, aspect='auto', height=None, width=None, title=None):
+    fig = px.imshow(pd.crosstab(df[x], df[y]), text_auto=text_auto, aspect=aspect, height=height, width=width,
+                    template='plotly_dark')
+    fig.update(layout_showlegend=False)
+    fig.update_layout(xaxis=dict(showticklabels=False),
+                      yaxis=dict(showticklabels=False))
+    fig.update_layout(title_text=title, title_x=0.5,
+                      margin=dict(l=2, r=2, t=30, b=2),
+                      paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
+                      )
+    return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+
+def month_bar(df=None,height=None, width=None):
+    t = df.groupby(['Month', 'Expense']).sum().reset_index()[['Month', 'Expense', 'Amount(₹)']]
+
+    month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+             "November", "December"]
+    m = {}
+    count = 1
+    for i in month:
+        m[count] = i
+        count += 1
+
+    t['Month'] = t['Month'].apply(lambda x: m[x])
+
+    fig = px.bar(t, x='Month', y='Amount(₹)', color='Expense', text_auto=True,height=height, width=width, template='plotly_dark')
+    fig.update_layout(legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ))
+    fig.update_layout(margin=dict(l=2, r=2, t=30, b=2),
+                     paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
+                     )
+    return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+
+def meraSunburst(df=None, height=None, width=None):
+    fig = px.sunburst(df, path=['Year', 'Expense', 'Note'], values='Amount(₹)',height=height,width=width)
+    fig.update_layout(margin=dict(l=1, r=1, t=1, b=1), paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+    fig.update(layout_showlegend=False)
+    return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
