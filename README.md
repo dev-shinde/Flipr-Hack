@@ -1,3 +1,5 @@
+![image](https://user-images.githubusercontent.com/40932902/211549885-ce3b5578-bbfa-401a-8d78-944d91d588b1.png)
+
 # Flask Expense Tracker
 
 ## Overview
