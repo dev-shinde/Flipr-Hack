@@ -399,3 +399,15 @@ form.contFrm {
     color: #fff;
     background: #172042;
 }
+
+.fa-check-circle {
+  color: green;
+}
+
+.width-auto {
+    width: auto;
+  }
+
+.width-100 {
+    width: 100%;
+  }

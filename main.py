@@ -108,6 +108,17 @@ def contact():
     return render_template("contact.html")
 
 
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    name = request.form.get("name")
+    email = request.form.get("email")
+    phone = request.form.get("phone")
+    sub = request.form.get("sub")
+    message = request.form.get("message")
+    flash("Thanks for reaching out to us. We will contact you soon.")
+    return redirect('/')
+
+
 @app.route('/home')
 def home():
     if 'user_id' in session:  # if user is logged-in
@@ -264,7 +275,8 @@ def update_profile():
     email_list = support.execute_query('search', query)
     if name != userdata[0][1] and email != userdata[0][2] and len(email_list) == 0:
         query = """update user_login set username = '{}', email = '{}' where user_id = '{}'""".format(name, email,
-                                                                                                    session['user_id'])
+                                                                                                      session[
+                                                                                                          'user_id'])
         support.execute_query('insert', query)
         flash("Name and Email updated!!")
         return redirect('/profile')
@@ -272,7 +284,7 @@ def update_profile():
         flash("Email already exists, try another!!")
         return redirect('/profile')
     elif name == userdata[0][1] and email != userdata[0][2] and len(email_list) == 0:
-        query = """update user_login set email = '{}' where user_id = '{}'""".format(email,session['user_id'])
+        query = """update user_login set email = '{}' where user_id = '{}'""".format(email, session['user_id'])
         support.execute_query('insert', query)
         flash("Email updated!!")
         return redirect('/profile')
