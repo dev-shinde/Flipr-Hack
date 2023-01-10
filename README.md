@@ -10,7 +10,7 @@ Whether you're a professional or an individual, Expense Tracker is the perfect s
 and reaching your financial goals.
 
 ## Prerequisites
-To fully utilize the features and capabilities of XYZ, users must have the following prerequisites installed on their system:
+To fully utilize the features and capabilities of Expense App, users must have the following prerequisites installed on their system:
 
 1. Python 3.6 or higher
 2. Flask web framework
@@ -77,7 +77,7 @@ The login page for Expense Tracker app will have the following functionalities:
 ![img.png](img.png)
     
 ### 2. Forget Password
-* The "Forgot Password" functionality of XYZ allows users to reset their existing account password in case they have forgotten it.
+* The "Forgot Password" functionality of Expense App allows users to reset their existing account password in case they have forgotten it.
 * Users can initiate a password reset by clicking on the "Forgot Password" link on the login page and providing their registered email address and new password. 
 * If the email address exists in the database,the password will reset successfully, 
 * the user will be redirected to the login page where they can enter their new password and access their account.
