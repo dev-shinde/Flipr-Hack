@@ -3,7 +3,7 @@
 ## Overview
 Introducing Expense Tracker, a powerful expense tracking web application built on Flask. This comprehensive tool is designed
 to assist users in effectively managing their financial transactions, including earnings, expenses, investments, and savings.
-With XYZ, users can easily record, track and categorize their expenses, providing them with valuable insights into their spending habits. 
+With Expense App, users can easily record, track and categorize their expenses, providing them with valuable insights into their spending habits. 
 Additionally, the application features advanced analysis and visualization tools, which allow users to gain a deeper understanding of 
 their financial data and make more informed financial decisions. 
 Whether you're a professional or an individual, Expense Tracker is the perfect solution for managing your finances 
