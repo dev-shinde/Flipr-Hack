@@ -9,14 +9,14 @@ import json
 def connect_db(host="localhost", user="root", passwd="123456", port=3306, database='expense',
                auth_plugin='mysql_native_password'):
     """
-
-    :param host:
-    :param user:
-    :param passwd:
-    :param port:
-    :param database:
-    :param auth_plugin:
-    :return:
+    Connect to database
+    :param host: host
+    :param user: username
+    :param passwd: password
+    :param port: port no
+    :param database: database name
+    :param auth_plugin: plugin
+    :return: connection, cursor
     """
     conn = mysql.connector.connect(host=host, user=user, passwd=passwd, port=port, database=database,
                                    auth_plugin=auth_plugin)
@@ -26,10 +26,10 @@ def connect_db(host="localhost", user="root", passwd="123456", port=3306, databa
 
 def close_db(connection=None, cursor=None):
     """
-
+    close database connection
     :param connection:
     :param cursor:
-    :return:
+    :return: close connection
     """
     cursor.close()
     connection.close()
@@ -37,10 +37,10 @@ def close_db(connection=None, cursor=None):
 
 def execute_query(operation=None, query=None):
     """
-
+    Execute Query
     :param operation:
     :param query:
-    :return:
+    :return: data incase search query or write to database
     """
     connection, cursor = connect_db()
     if operation == 'search':
@@ -58,9 +58,9 @@ def execute_query(operation=None, query=None):
 
 def generate_df(df):
     """
-
+    create new features
     :param df:
-    :return:
+    :return: df
     """
     df = df
     df['Date'] = pd.to_datetime(df['Date'])
@@ -90,9 +90,9 @@ def num2MB(num):
 
 def top_tiles(df=None):
     """
-
+    Sum of total expenses
     :param df:
-    :return:
+    :return: sum
     """
     if df is not None:
         tiles_data = df[['Expense', 'Amount']].groupby('Expense').sum()
@@ -108,7 +108,7 @@ def top_tiles(df=None):
 
 def generate_Graph(df=None):
     """
-
+    create graph
     :param df: Dataframe
     :return:
     """
@@ -194,7 +194,7 @@ def meraBarChart(df=None, x=None, y=None, color=None, x_label=None, y_label=None
 
 def get_monthly_data(df, year=datetime.datetime.today().year, res='int'):
     """
-    Data for Records record table
+    Data table
     :param res:
     :param df: Dataframe
     :param year: present year
@@ -274,6 +274,7 @@ def sort_summary(df):
 
 def expense_goal(df):
     """
+    Monthly goal data
     :param df: Dataframe
     :return: list of dictionary
     """
