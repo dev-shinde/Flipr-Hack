@@ -197,6 +197,9 @@ This can also help to reduce the risk of session hijacking and ensures that only
 The time of inactivity can be configured as per the requirement, but the default settings is 5 minutes. 
 The user also will be prompted with a message before session termination so that he can save any unsaved data.
 
+## Deployment on Google Cloud(GCP)
+- Follow the step by step deployment [process](https://github.com/santos-k/Notes/blob/main/Deploy_Portfolio_on_GCP.md)
+
 
 ## Contributing
 We welcome contributions to Expense App! If you would like to contribute.
