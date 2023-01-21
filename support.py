@@ -1,27 +1,45 @@
 import datetime
 import pandas as pd
-import mysql.connector  # pip install mysql-connector-python
+# import mysql.connector  # pip install mysql-connector-python==8.0.31
+import sqlite3
 import plotly
 import plotly.express as px
 import json
 
 
-def connect_db(host="localhost", user="root", passwd="123456", port=3306, database='expense',
-               auth_plugin='mysql_native_password'):
-    """
-    Connect to database
-    :param host: host
-    :param user: username
-    :param passwd: password
-    :param port: port no
-    :param database: database name
-    :param auth_plugin: plugin
-    :return: connection, cursor
-    """
-    conn = mysql.connector.connect(host=host, user=user, passwd=passwd, port=port, database=database,
-                                   auth_plugin=auth_plugin)
-    cursor = conn.cursor()
-    return conn, cursor
+# Use this function for SQLITE3
+def connect_db():
+    conn = sqlite3.connect("expense.db")
+    cur = conn.cursor()
+    cur.execute(
+        '''CREATE TABLE IF NOT EXISTS user_login (user_id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(30) NOT NULL, 
+        email VARCHAR(30) NOT NULL UNIQUE, password VARCHAR(20) NOT NULL)''')
+    cur.execute(
+        '''CREATE TABLE IF NOT EXISTS user_expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, pdate DATE NOT 
+        NULL, expense VARCHAR(10) NOT NULL, amount INTEGER NOT NULL, pdescription VARCHAR(50), FOREIGN KEY (user_id) 
+        REFERENCES user_login(user_id))''')
+    conn.commit()
+    return conn, cur
+
+
+# Use this function for mysql
+# import mysql.connector  # pip install mysql-connector-python
+# def connect_db(host="localhost", user="root", passwd="123456", port=3306, database='expense',
+#                auth_plugin='mysql_native_password'):
+#     """
+#     Connect to database
+#     :param host: host
+#     :param user: username
+#     :param passwd: password
+#     :param port: port no
+#     :param database: database name
+#     :param auth_plugin: plugin
+#     :return: connection, cursor
+#     """
+#     conn = mysql.connector.connect(host=host, user=user, passwd=passwd, port=port, database=database,
+#                                    auth_plugin=auth_plugin)
+#     cursor = conn.cursor()
+#     return conn, cursor
 
 
 def close_db(connection=None, cursor=None):
@@ -363,7 +381,7 @@ def meraHeatmap(df=None, x=None, y=None, text_auto=True, aspect='auto', height=N
     return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
 
-def month_bar(df=None,height=None, width=None):
+def month_bar(df=None, height=None, width=None):
     t = df.groupby(['Month', 'Expense']).sum().reset_index()[['Month', 'Expense', 'Amount(₹)']]
 
     month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
@@ -376,7 +394,8 @@ def month_bar(df=None,height=None, width=None):
 
     t['Month'] = t['Month'].apply(lambda x: m[x])
 
-    fig = px.bar(t, x='Month', y='Amount(₹)', color='Expense', text_auto=True,height=height, width=width, template='plotly_dark')
+    fig = px.bar(t, x='Month', y='Amount(₹)', color='Expense', text_auto=True, height=height, width=width,
+                 template='plotly_dark')
     fig.update_layout(legend=dict(
         orientation="h",
         yanchor="bottom",
@@ -385,13 +404,13 @@ def month_bar(df=None,height=None, width=None):
         x=1
     ))
     fig.update_layout(margin=dict(l=2, r=2, t=30, b=2),
-                     paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
-                     )
+                      paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
+                      )
     return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
 
 def meraSunburst(df=None, height=None, width=None):
-    fig = px.sunburst(df, path=['Year', 'Expense', 'Note'], values='Amount(₹)',height=height,width=width)
+    fig = px.sunburst(df, path=['Year', 'Expense', 'Note'], values='Amount(₹)', height=height, width=width)
     fig.update_layout(margin=dict(l=1, r=1, t=1, b=1), paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
     fig.update(layout_showlegend=False)
     return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
