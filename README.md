@@ -1,17 +1,18 @@
-# Flask Expense Tracker
-[Live](https://expensestrackerapp-ysma7ol4bq-em.a.run.app/)
+# [Flask Expense Tracker](https://expensestrackerapp-ysma7ol4bq-em.a.run.app/)
 
-![image](https://user-images.githubusercontent.com/40932902/211549885-ce3b5578-bbfa-401a-8d78-944d91d588b1.png)
+<p align='center'>
+    <img src="https://user-images.githubusercontent.com/40932902/211549885-ce3b5578-bbfa-401a-8d78-944d91d588b1.png"
+</p>
+<p align="center">
+  <a href="https://www.python.org/downloads/release/python-310/"><img src="http://ForTheBadge.com/images/badges/made-with-python.svg"></a>
+</p>
 
-[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-310/)
-[![Flask 2.2](https://img.shields.io/badge/Flask-2.2-blue)](https://pypi.org/project/Flask/)
-[![Plolty 5.11](https://img.shields.io/badge/Plotly-5.11-blue)](https://pypi.org/project/plotly/)
-![GitHub repo size](https://img.shields.io/github/repo-size/santos-k/Flask_Expense_App?logo=github) 
-![GitHub Repo stars](https://img.shields.io/github/stars/santos-k/Flask_Expense_App?style=social) 
-![GitHub watchers](https://img.shields.io/github/watchers/santos-k/Flask_Expense_App?style=social) 
-![GitHub followers](https://img.shields.io/github/followers/santos-k?style=social) 
-![Bower](https://img.shields.io/bower/l/flask) 
-
+<p align="center">
+    <img src="https://img.shields.io/badge/Flask-2.2-blue">
+    <img src="https://img.shields.io/badge/Plotly-5.11-blue">
+    <img src="https://img.shields.io/github/repo-size/santos-k/Flask_Expense_App?logo=github">
+    <img src="https://img.shields.io/bower/l/flask">
+</p>
 
 ## Overview
 Introducing Expense Tracker, a powerful expense tracking web application built on Flask. This comprehensive tool is designed
