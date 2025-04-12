@@ -13,10 +13,43 @@
     <title>Expense Tracker - Login</title>
   </head>
   <body class="body">
-<!--  Creating navbar-->
-    <nav class="navbar bg-nav">
-        <a href="" class="navbar-brand text-light">Expense App</a>
-
+    <!-- Replace the entire existing navbar div with this -->
+    <nav class="navbar navbar-expand-md bg-light"> <!-- bg-light for white background -->
+        <a class="navbar-brand text-dark" href="/">Expense Tracker</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <!-- Remove these links -->
+            <!--ul class="navbar-nav mx-auto mb-2 mb-md-0 d-flex align-items-center" style="gap: 1.2rem;">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/analysis">Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/profile">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center {% if request.endpoint == 'chat' %}active text-primary fw-bold{% else %}text-dark{% endif %}" href="/chat">
+                        <span class="me-1">Ai</span> Advisor
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/ai_assistance">AI Assistance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/contact">Contact Us</a>
+                </li>
+            </ul-->
+            <!-- Logout button at the end -->
+            <!-- <ul class="navbar-nav ms-auto d-flex align-items-center">
+                <li class="nav-item">
+                    <a class="btn btn-outline-danger ms-2" style="background-color: black; color: red;" href="/logout">Logout</a>
+                </li>
+            </ul> -->
+        </div>
     </nav>
 <!--  creating a main div  -->
     <div class="container">
@@ -33,7 +66,7 @@
          <div class="alert alert-warning alert-dismissible fade show my-1" id="alert" role="alert">
                     {{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true">×</span>
             </button>
         </div>
          {% endfor %}
@@ -86,7 +119,6 @@
                     </div>
                 </div>
               <p class="mt-2">Not a member? <a href="/register">Register</a></p>
-                <p class="mt-2">Any Query? <a href="/contact">Contact Us</a> </p>
             </div>
           </div>
         </div>

@@ -9,30 +9,52 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
 </head>
 <body class="page-bg">
-    <div class="bg-nav d-flex flex-column flex-md-row align-items-center pb-0 mb-0 border-bottom">
-        <h5 class="m-3 mr-md-auto font-weight-normal"><a href="/" style="text-decoration : none">Expense Tracker - {{ user_name }}</a></h5>
-
-        <nav class="m-2 my-md-0 mr-md-3">
-            <a class="py-2 m-2 text-dark" href="/home">Home</a>
-            <a class="py-2 m-2 text-dark" href="/analysis">Analysis</a>
-            <a class="py-2 m-2 text-dark" href="/profile">Profile</a>
-            <a class="py-2 m-2 text-dark" href="/contact">Contact Us</a>
-            <a class="py-2 m-2 text-dark" href="/ai_assistance">AI Assistance</a>
-
-            <a class="py-2 m-2 text-dark" href="/chat">Chat</a>
-        </nav>
-        <a class="btn m-2 btn-outline-warning" href="/logout">Logout</a>
-    </div>
+    <!-- Replace the entire existing navbar div with this -->
+    <nav class="navbar navbar-expand-md bg-light"> <!-- bg-light for white background -->
+        <a class="navbar-brand text-dark" href="/">Expense Tracker - {{ user_name }}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <!-- Use mx-auto to center the links and adjust gap -->
+            <ul class="navbar-nav mx-auto mb-2 mb-md-0 d-flex align-items-center" style="gap: 1.2rem;">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/analysis">Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/profile">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center {% if request.endpoint == 'chat' %}active text-primary fw-bold{% else %}text-dark{% endif %}" href="/chat">
+                        <span class="me-1">SaraswatiAi</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/ai_assistance">AI Assistance</a>
+                </li>
+            </ul>
+            <!-- Logout button at the end -->
+            <ul class="navbar-nav d-flex align-items-center">
+                <li class="nav-item">
+                    <!-- Use inline style to change the button's appearance -->
+                    <a class="btn btn-outline-danger ms-2" style="background-color: black; color: rgb(226, 73, 53);" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
     <div class="container">
-        <h1>Chat with Gemini</h1>
+        <h1 style="color: white;">Chat with SaraswatiAI</h1>
         <!--  Expense Summary -->
-        <div class="card">
+        <!-- <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Expense Summary</h5>
                 <p class="card-text">{{ expense_summary }}</p>
             </div>
-        </div>
+        </div> -->
 
         <div id="chat-area">
             <!-- Chat messages will be displayed here -->
@@ -46,12 +68,12 @@
         </div>
 
         <!-- Gamification Elements (Example) -->
-        <div class="gamification">
+        <!-- <div class="gamification">
             <span class="badge">Level 1</span>
             <div class="progress">
                 <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

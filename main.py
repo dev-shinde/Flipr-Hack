@@ -417,9 +417,9 @@ def generate_ai_content():
 
         # Construct the prompt based on the content type
         if content_type == 'insights':
-            prompt = f"You are a personal finance expert. Generate 1-2 key insights based on this expense data: {expense_summary}. Focus on key trends and areas for improvement. Present each insight as a separate bullet point, using markdown format. (Also add some cool emojies)"
+            prompt = f"You are a personal finance expert. Analyze this dataset: {expense_summary} that includes columns. Identify non-essential or excessive spending by category. Provide a short pointer one liner briefly explaining the unusual high spending, highlighting areas where the user might be overspending based on typical daily needs. Limit the points to only 5 and entire content to 40 words. Present each insight as a separate bullet point, using markdown format.(Also add some cool emojies). Don't provide heading"
         elif content_type == 'budgeting_tips':
-            prompt = f"You are a financial advisor. Generate 1-2 actionable budgeting tips based on this expense data: {expense_summary}. Present each tip as a separate bullet point, using markdown format. (Also add some cool emojies)"
+            prompt = f"You are a financial advisor.Based on the categories and amounts in this expense dataset: {expense_summary}, provide 5 realistic, actionable suggestions to help the user reduce or optimize spending. Limit the entire content to 40 words by focussing on practical tips that can be implemented without drastically changing lifestyle, and prioritize savings on non-essential expenses. Present each insight as a separate bullet point, using markdown format. (Also add some cool emojies). Don't provide heading"
         else:
             return jsonify({'error': 'Invalid content_type'}), 400
 

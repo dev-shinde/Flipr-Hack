@@ -12,17 +12,42 @@
     <title>Expense Tracker - Analysis</title>
 </head>
 <body class="body">
- <div class="bg-nav d-flex flex-column flex-md-row align-items-center pb-0 mb-0 border-bottom">
-  <h5 class="m-3 mr-md-auto font-weight-normal"><a href="/" style="text-decoration : none">Expense Tracker - {{ user_name }}</a></h5>
-
-  <nav class="m-2 my-md-0 mr-md-3">
-    <a class="py-2 m-2 text-dark" href="/home">Home</a>
-    <a class="py-2 m-2 text-dark" href="/analysis">Analysis</a>
-    <a class="py-2 m-2 text-dark" href="/profile">Profile</a>
-    <a class="py-2 m-2 text-dark" href="/contact">Contact Us</a>
-  </nav>
-     <a class="btn m-2 btn-outline-warning" href="/logout">Logout</a>
-</div>
+    <!-- Replace the entire existing navbar div with this -->
+    <nav class="navbar navbar-expand-md bg-light"> <!-- bg-light for white background -->
+        <a class="navbar-brand text-dark" href="/">Expense Tracker - {{ user_name }}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <!-- Use mx-auto to center the links and adjust gap -->
+            <ul class="navbar-nav mx-auto mb-2 mb-md-0 d-flex align-items-center" style="gap: 1.2rem;">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/analysis">Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/profile">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center {% if request.endpoint == 'chat' %}active text-primary fw-bold{% else %}text-dark{% endif %}" href="/chat">
+                        <span class="me-1">SaraswatiAi</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/ai_assistance">AI Assistance</a>
+                </li>
+            </ul>
+            <!-- Logout button at the end -->
+            <ul class="navbar-nav d-flex align-items-center">
+                <li class="nav-item">
+                    <!-- Use inline style to change the button's appearance -->
+                    <a class="btn btn-outline-danger ms-2" style="background-color: black; color: red;" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
  <div class="container">
      <div class="row my-3">
@@ -32,7 +57,7 @@
             <hr>
             <div class="analysis-overview">
                 <h3>Analysis Overview</h3>
-                <p class="darker-font">This page provides a comprehensive overview of your spending habits. Each visualization is designed to highlight different aspects of your financial activity, allowing you to identify trends, patterns, and areas for improvement.</p>
+                <p class="darker-font" style="color: #EEEEEE;">This page provides a comprehensive overview of your spending habits. Each visualization is designed to highlight different aspects of your financial activity, allowing you to identify trends, patterns, and areas for improvement.</p>
             </div>
 
             <!-- Category: Expense Distribution -->
@@ -48,9 +73,9 @@
 
                  <!-- Description for Expense Category Breakdown -->
                  <div class="col-md-4 description-area">
-                     <h5>Expense Category Breakdown</h5>
-                     <small>Percentage distribution of expenses across categories.</small>
-                     <p class="darker-font">This chart shows how your expenses are divided among different categories (e.g., Spend, Earning, Investment, Saving).</p>
+                     <h5 style="color: #000000;">Expense Category Breakdown</h5>
+                     <small style="font-size: 1.1rem; color: #FFFFFF; text-decoration: underline;">Percentage distribution of expenses across categories.</small>
+                     <p class="darker-font" style="color: #EEEEEE;">This chart shows how your expenses are divided among different categories (e.g., Spend, Earning, Investment, Saving).</p>
                  </div>
             </div>
 
@@ -64,9 +89,9 @@
 
                  <!-- Description for Spending by Category -->
                  <div class="col-md-4 description-area">
-                     <h5>Spending by Category</h5>
-                     <small>Amount spent for each category.</small>
-                     <p class="darker-font">This chart displays the total amount spent in each expense category. It helps you identify which specific areas consume the most of your funds.</p>
+                     <h5 style="color: #000000;">Spending by Category</h5>
+                     <small style="font-size: 1.1rem; color: #FFFFFF; text-decoration: underline;">Amount spent for each category.</small>
+                     <p class="darker-font" style="color: #EEEEEE;">This chart displays the total amount spent in each expense category. It helps you identify which specific areas consume the most of your funds.</p>
                  </div>
             </div>
 
@@ -75,17 +100,17 @@
             <h3>Time-Based Analysis</h3>
             <div class="row">
                 <!-- Expense Trend Over Time -->
-                <div class="col-md-8 visualization-area">
+                 <div class="col-md-8 visualization-area">
                      <div class="goal-panel m-2">
-                         <div id="line" class="graph"></div>
+                         <div id="line" class="chart"></div>
                      </div>
                  </div>
 
                  <!-- Description for Expense Trend Over Time -->
                  <div class="col-md-4 description-area">
-                     <h5>Expense Trend Over Time</h5>
-                     <small>How expenses change over time.</small>
-                     <p class="darker-font">This chart visualizes the trend of your expenses over time. Rising trends indicate increasing expenses, while declining trends suggest reduced spending.</p>
+                     <h5 style="color: #000000;">Expense Trend Over Time</h5>
+                     <small style="font-size: 1.1rem; color: #FFFFFF; text-decoration: underline;">How expenses change over time.</small>
+                     <p class="darker-font" style="color: #EEEEEE;">This chart visualizes the trend of your expenses over time. Rising trends indicate increasing expenses, while declining trends suggest reduced spending.</p>
                  </div>
             </div>
 
@@ -99,9 +124,9 @@
 
                  <!-- Description for Monthly Spending Summary -->
                  <div class="col-md-4 description-area">
-                     <h5>Monthly Spending Summary</h5>
-                     <small>Total expenses for each month.</small>
-                     <p class="darker-font">This chart summarizes your total expenses for each month, allowing you to compare spending patterns across different months.</p>
+                     <h5 style="color: #000000;">Monthly Spending Summary</h5>
+                     <small style="font-size: 1.1rem; color: #FFFFFF; text-decoration: underline;">Total expenses for each month.</small>
+                     <p class="darker-font" style="color: #EEEEEE;">This chart summarizes your total expenses for each month, allowing you to compare spending patterns across different months.</p>
                  </div>
             </div>
 
@@ -118,9 +143,9 @@
 
                  <!-- Description for Detailed Expense Allocation -->
                  <div class="col-md-4 description-area">
-                     <h5>Detailed Expense Allocation</h5>
-                     <small>Hierarchical breakdown of expenses.</small>
-                     <p class="darker-font">This chart provides a detailed, hierarchical view of your expenses, breaking them down into categories and subcategories.</p>
+                     <h5 style="color: #000000;">Detailed Expense Allocation</h5>
+                     <small style="font-size: 1.1rem; color: #FFFFFF; text-decoration: underline;">Hierarchical breakdown of expenses.</small>
+                     <p class="darker-font" style="color: #EEEEEE;">This chart provides a detailed, hierarchical view of your expenses, breaking them down into categories and subcategories.</p>
                  </div>
             </div>
 
@@ -134,9 +159,8 @@
 
                  <!-- Description for Transaction Count Heatmap -->
                  <div class="col-md-4 description-area">
-                     <h5>Transaction Count Heatmap</h5>
-                     <small>Transaction count for each day over the month.</small>
-                     <p class="darker-font">This chart shows the distribution of your transactions over days and months. It helps identify patterns in your spending habits.</p>
+                     <h5 style="color: #000000;">Transaction Count Heatmap</h5>
+                     <small style="font-size: 1.1rem; color: #FFFFFF; text-decoration: underline;">Transaction count for each day over the month.</small>                     <p class="darker-font" style="color: #EEEEEE;">This chart shows the distribution of your transactions over days and months. It helps identify patterns in your spending habits.</p>
                  </div>
             </div>
 
@@ -145,7 +169,7 @@
             <h3>Other</h3>
             <div class="row">
                 <!-- Spending Over Time -->
-                <div class="col-md-8 visualization-area">
+                 <div class="col-md-8 visualization-area">
                      <div class="goal-panel text-center m-2">
                          <div id="scatter" class="chart"></div>
                      </div>
@@ -153,9 +177,9 @@
 
                  <!-- Description for Spending Over Time -->
                  <div class="col-md-4 description-area">
-                     <h5>Spending Over Time</h5>
-                     <small>This chart shows the relation of amount over time</small>
-                     <p class="darker-font">This chart shows the relation of amount over time.</p>
+                     <h5 style="color: #000000;">Spending Over Time</h5>
+                     <small style="font-size: 1.1rem; color: #FFFFFF; text-decoration: underline;">This chart shows the relation of amount over time</small>
+                     <p class="darker-font" style="color: #EEEEEE;">This chart shows the relation of amount over time.</p>
                  </div>
             </div>
          </div>

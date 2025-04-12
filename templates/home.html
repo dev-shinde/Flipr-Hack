@@ -1,82 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
-        <!-- Bootstrap CSS -->
-        <link href="/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <!-- Google Icons -->
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+    <!-- Bootstrap CSS -->
+    <link href="/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
-        <title>Expense Tracker - Home</title>
-    </head>
-    <body class="page-bg">
-     <div class="bg-nav d-flex flex-column flex-md-row align-items-center pb-0 mb-0 border-bottom">
-      <h5 class="m-3 mr-md-auto font-weight-normal"><a href="/" style="text-decoration : none">Expense Tracker - {{ user_name }}</a></h5>
-
-      <nav class="m-2 my-md-0 mr-md-3">
-        <a class="py-2 m-2 text-dark" href="/home">Home</a>
-        <a class="py-2 m-2 text-dark" href="/analysis">Analysis</a>
-        <a class="py-2 m-2 text-dark" href="/profile">Profile</a>
-        <a href="/chat" class="nav-item {% if request.endpoint == 'chat' %}active{% endif %}">
-            <span class="nav-icon">💬</span>
-            <span>Chat</span>
-        </a>
-
-        <a class="py-2 m-2 text-dark" href="/ai_assistance">AI Assistance</a>
-
-        <a class="py-2 m-2 text-dark" href="/contact">Contact Us</a>
-      </nav>
-         <a class="btn m-2 btn-outline-warning" href="/logout">Logout</a>
-    </div>
+    <title>Expense Tracker - Home</title>
+</head>
+<body class="page-bg">
+    <!-- Replace the entire existing navbar div with this -->
+    <nav class="navbar navbar-expand-md bg-light"> <!-- bg-light for white background -->
+        <a class="navbar-brand text-dark" href="/">Expense Tracker - {{ user_name }}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <!-- Use mx-auto to center the links -->
+            <ul class="navbar-nav mx-auto mb-2 mb-md-0 d-flex align-items-center" style="gap: 1.2rem;">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/analysis">Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/profile">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center {% if request.endpoint == 'chat' %}active text-primary fw-bold{% else %}text-dark{% endif %}" href="/chat">
+                        <span class="me-1">SaraswatiAi</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/ai_assistance">AI Assistance</a>
+                </li>
+            </ul>
+            <!-- Logout button at the end -->
+            <ul class="navbar-nav d-flex align-items-center">
+                <li class="nav-item">
+                    <!-- Use inline style to change the button's appearance -->
+                    <a class="btn btn-outline-danger ms-2" style="background-color: black; color: rgb(226, 53, 53);" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
      <div>
         {% for message in get_flashed_messages() %}
          <div class="alert alert-warning alert-dismissible fade show" id="alert" role="alert">
                     {{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true">×</span>
             </button>
         </div>
          {% endfor %}
      </div>
 
-     <!-- Main container-->
+        <!-- Main container-->
      <div class="container ">
         <!-- Tiles row-->
          <div class="row my-2 ">
              <div class="col-md-3">
-                 <div class="card deep-purple my-1">
+                 <div class="card my-1" style="background-color: white; border: 3px solid #800080; border-radius: 10px; color: black;">
                      <div class="card-body ">
-                         <h5 class="text-center">Total Earnings</h5>
-                         <h2 class="text-center">₹ {{ earning }}</h2>
+                         <h5 class="text-center text-black">Total Earnings</h5>
+                         <h2 class="text-center text-black">₹ {{ earning }}</h2>
                      </div>
                  </div>
              </div>
              <div class="col-md-3">
-                 <div class="card alive my-1">
+                 <div class="card my-1" style="background-color: white; border: 3px solid #CB356B; border-radius: 10px; color: black;">
                      <div class="card-body ">
-                         <h5 class="text-center">Total Spends</h5>
-                         <h2 class="text-center">₹ {{ spend }}</h2>
+                         <h5 class="text-center text-black">Total Spends</h5>
+                         <h2 class="text-center text-black">₹ {{ spend }}</h2>
                      </div>
                  </div>
              </div>
              <div class="col-md-3">
-                 <div class="card citrus my-1">
+                 <div class="card my-1" style="background-color: white; border: 3px solid #FDC830; border-radius: 10px; color: black;">
                      <div class="card-body ">
-                         <h5 class="text-center">Total Investments</h5>
-                         <h2 class="text-center">₹ {{ invest }}</h2>
+                         <h5 class="text-center text-black">Total Investments</h5>
+                         <h2 class="text-center text-black">₹ {{ invest }}</h2>
                      </div>
                  </div>
              </div>
              <div class="col-md-3">
-                 <div class="card green my-1">
+                 <div class="card  my-1" style="background-color: white; border: 3px solid #11998e; border-radius: 10px; color: black;">
                      <div class="card-body ">
-                         <h5 class="text-center">Total Savings</h5>
-                         <h2 class="text-center">₹ {{ saving }}</h2>
+                         <h5 class="text-center text-black">Total Savings</h5>
+                         <h2 class="text-center text-black">₹ {{ saving }}</h2>
                      </div>
                  </div>
              </div>
@@ -130,27 +147,27 @@
                                             <option value="House Rent">House Rent</option>
                                             <option value="Shopping">Shopping</option>
                                             <option value="Groceries">Groceries</option>
-                                            <option value="Goods">Goods</option>
-                                            <option value="Travel">Travel</option>
-                                            <option value="Fuel">Fuel</option>
-                                            <option value="EMI">EMI</option>
-                                            <option value="Bills">Bills</option>
-                                            <option value="Gifts">Gifts</option>
-                                            <option value="Medical">Medical</option>
-                                            <option value="Fees">Fees</option>
-                                            <option value="Vacation">Vocation</option>
-                                            <option value="Mutual Funds">Mutual Funds</option>
-                                            <option value="Bonds">Bonds</option>
-                                            <option value="ETF">ETF</option>
-                                            <option value="Fixed Deposit">Fixed Deposit</option>
-                                            <option value="Retirement Plan">Retirement Plan</option>
-                                            <option value="Real Estate">Real Estate</option>
-                                            <option value="Home Purchase">Home Purchase</option>
-                                            <option value="Child Saving">Child Saving</option>
-                                            <option value="Vacation">Vacation</option>
-                                            <option value="Health Account">Health Account</option>
-                                            <option value="Bank">Bank</option>
-                                            <option value="Others">Others</option>
+                                            <option value="Goods">Goods</Goods>
+                                            <option value="Travel">Travel</Travel>
+                                            <option value="Fuel">Fuel</Fuel>
+                                            <option value="EMI">EMI</EMI>
+                                            <option value="Bills">Bills</Bills>
+                                            <option value="Gifts">Gifts</Gifts>
+                                            <option value="Medical">Medical</Medical>
+                                            <option value="Fees">Fees</Fees>
+                                            <option value="Vacation">Vacation</Vacation>
+                                            <option value="Mutual Funds">Mutual Funds</Mutual Funds>
+                                            <option value="Bonds">Bonds</Bonds>
+                                            <option value="ETF">ETF</ETF>
+                                            <option value="Fixed Deposit">Fixed Deposit</Fixed Deposit>
+                                            <option value="Retirement Plan">Retirement Plan</Retirement Plan>
+                                            <option value="Real Estate">Real Estate</Real Estate>
+                                            <option value="Home Purchase">Home Purchase</Home Purchase>
+                                            <option value="Child Saving">Child Saving</Child Saving>
+                                            <option value="Vacation">Vacation</Vacation>
+                                            <option value="Health Account">Health Account</Health Account>
+                                            <option value="Bank">Bank</Bank>
+                                            <option value="Others">Others</Others>
                                         </select> -->
                                         
                                         <div class="form-group">
@@ -330,7 +347,7 @@
           <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
             <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
           </a>
-          <!-- <span class="text-muted">&copy; 2022 Expense Tracker, Inc</span> -->
+          <!-- <span class="text-muted">© 2022 Expense Tracker, Inc</span> -->
         </div>
       </footer>
     </div>
