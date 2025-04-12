@@ -22,6 +22,13 @@
         <a class="py-2 m-2 text-dark" href="/home">Home</a>
         <a class="py-2 m-2 text-dark" href="/analysis">Analysis</a>
         <a class="py-2 m-2 text-dark" href="/profile">Profile</a>
+        <a href="/chat" class="nav-item {% if request.endpoint == 'chat' %}active{% endif %}">
+            <span class="nav-icon">💬</span>
+            <span>Chat</span>
+        </a>
+
+        <a class="py-2 m-2 text-dark" href="/ai_assistance">AI Assistance</a>
+
         <a class="py-2 m-2 text-dark" href="/contact">Contact Us</a>
       </nav>
          <a class="btn m-2 btn-outline-warning" href="/logout">Logout</a>
@@ -107,7 +114,7 @@
                                             <option value="Saving">Saving</option>
                                         </select>
                                         <input type="number" class="form-control my-1" id="amount" name="amount" placeholder="Enter Amount" required>
-                                        <select class="form-control my-1" name="notes" required>
+                                        <!-- <select class="form-control my-1" name="notes" required>
                                             <option selected hidden value="None">Select...</option>
                                             <option value="Earning">Earning</option>
                                             <option value="Spend">Spend</option>
@@ -144,7 +151,13 @@
                                             <option value="Health Account">Health Account</option>
                                             <option value="Bank">Bank</option>
                                             <option value="Others">Others</option>
-                                        </select>
+                                        </select> -->
+                                        
+                                        <div class="form-group">
+                                            <!-- <label for="comment">Comment</label> -->
+                                            <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Enter a comment about this transaction" required></textarea>
+                                        </div>
+
                                         <input type="submit" class="btn my-2 btn-primary btn-block" id="add" name="add" value="Submit">
                                     </form>
                                 </div>

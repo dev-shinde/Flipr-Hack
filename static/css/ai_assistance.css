@@ -1,0 +1,23 @@
+/* Styles for the AI Assistance page */
+.ai-box {
+    background-color: #374151;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ai-box:hover {
+    background-color: #4A5568;
+}
+
+.ai-box h2 {
+    color: #8BE9FD;
+    margin-bottom: 10px;
+}
+
+.ai-box p {
+    color: #C6C6D1;
+}

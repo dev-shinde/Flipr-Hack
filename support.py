@@ -52,6 +52,35 @@ def close_db(connection=None, cursor=None):
     cursor.close()
     connection.close()
 
+def get_expense_summary(user_id):
+    """
+    Retrieves a summarized version of the user's expense data from the database.
+
+    Args:
+        user_id: The ID of the user.
+
+    Returns:
+        A string containing a summary of the user's expenses.
+    """
+    query = """
+        SELECT expense, SUM(amount)
+        FROM user_expenses
+        WHERE user_id = {}
+        GROUP BY expense
+    """.format(user_id)
+
+    data = execute_query("search", query)
+
+    if not data:
+        return "No expense data available."
+
+    summary = "Expense Summary:\n"
+    for expense, amount in data:
+        summary += f"- {expense}: {amount}\n"
+
+    # Add more sophisticated summary logic here (e.g., monthly summaries, etc.)
+
+    return summary
 
 def execute_query(operation=None, query=None):
     """

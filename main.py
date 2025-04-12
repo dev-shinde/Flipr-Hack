@@ -7,11 +7,23 @@ import plotly.express as px
 import json
 import warnings
 import support
+import google.generativeai as genai  # Import genai
+from dotenv import load_dotenv
 
 warnings.filterwarnings("ignore")
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
+
+load_dotenv()
+
+GENAI_API_KEY = os.getenv("GENAI_API_KEY")
+
+if not GENAI_API_KEY:
+    raise ValueError("GENAI_API_KEY not found in environment variables.")
+
+genai.configure(api_key=GENAI_API_KEY)
+model = genai.GenerativeModel('gemini-2.0-flash')
 
 
 @app.route('/')
@@ -80,24 +92,25 @@ def registration():
         name = request.form.get('name')
         email = request.form.get('email')
         passwd = request.form.get('password')
-        if len(name) > 5 and len(email) > 10 and len(passwd) > 5:  # if input details satisfy length condition
-            try:
-                query = """INSERT INTO user_login(username, email, password) VALUES('{}','{}','{}')""".format(name,
-                                                                                                              email,
-                                                                                                              passwd)
-                support.execute_query('insert', query)
+        # Removed length check
+        # if len(name) > 5 and len(email) > 10 and len(passwd) > 5:  # if input details satisfy length condition
+        try:
+            query = """INSERT INTO user_login(username, email, password) VALUES('{}','{}','{}')""".format(name,
+                                                                                                          email,
+                                                                                                          passwd)
+            support.execute_query('insert', query)
 
-                user = support.execute_query('search',
-                                             """SELECT * from user_login where email LIKE '{}'""".format(email))
-                session['user_id'] = user[0][0]  # set session on successful registration
-                flash("Successfully Registered!!")
-                return redirect('/home')
-            except:
-                flash("Email id already exists, use another email!!")
-                return redirect('/register')
-        else:  # if input condition length not satisfy
-            flash("Not enough data to register, try again!!")
+            user = support.execute_query('search',
+                                         """SELECT * from user_login where email LIKE '{}'""".format(email))
+            session['user_id'] = user[0][0]  # set session on successful registration
+            flash("Successfully Registered!!")
+            return redirect('/home')
+        except:
+            flash("Email id already exists, use another email!!")
             return redirect('/register')
+        # else:  # if input condition length not satisfy
+        #     flash("Not enough data to register, try again!!")
+        #     return redirect('/register')
     else:  # if already logged-in
         flash("Already a user is logged-in!")
         return redirect('/home')
@@ -195,22 +208,38 @@ def add_expense():
         user_id = session['user_id']
         if request.method == 'POST':
             date = request.form.get('e_date')
-            expense = request.form.get('e_type')
             amount = request.form.get('amount')
-            notes = request.form.get('notes')
+            comment = request.form.get('comment')
+
+            # Basic logic to categorize the expense based on keywords in the comment
+            expense_type = categorize_expense(comment) # Define this function as described below.
+
             try:
                 query = """insert into user_expenses (user_id, pdate, expense, amount, pdescription) values 
-                ({}, '{}','{}',{},'{}')""".format(user_id, date, expense, amount, notes)
+                ({}, '{}','{}',{},'{}')""".format(user_id, date, expense_type, amount, comment)
                 support.execute_query('insert', query)
                 flash("Saved!!")
-            except:
-                flash("Something went wrong.")
+            except Exception as e:
+                flash(f"Something went wrong: {e}")
                 return redirect("/home")
             return redirect('/home')
     else:
         return redirect('/')
 
-
+def categorize_expense(comment):
+    """
+    Categorizes an expense based on keywords in the comment.  You'll need to
+    adapt this to your specific categories and keywords.
+    """
+    comment = comment.lower()
+    if "salary" in comment or "bonus" in comment:
+        return "Earning"
+    elif "investment" in comment or "mutual fund" in comment:
+        return "Investment"
+    elif "saving" in comment or "bank" in comment:
+        return "Saving"
+    else:
+        return "Spend" # Default to "Spend" if no keywords are found
 @app.route('/analysis')
 def analysis():
     if 'user_id' in session:  # if already logged-in
@@ -311,5 +340,101 @@ def logout():
         return redirect('/')
 
 
+@app.route('/chat')
+def chat():
+    """Renders the chat page."""
+    if 'user_id' not in session:
+        return redirect('/')  # Redirect to login if not logged in
+
+    query = """select * from user_login where user_id = {} """.format(session['user_id'])
+    userdata = support.execute_query("search", query)
+    user_name = userdata[0][1]
+
+    # Fetch expense data for the user
+    expense_summary = support.get_expense_summary(session['user_id'])  # Implement this in support.py
+
+    return render_template('chat.html', user_name=user_name, expense_summary=expense_summary)
+
+@app.route('/ask', methods=['POST'])
+def ask_gemini():
+    """
+    Endpoint to receive a text prompt and return Gemini's response.
+    """
+    try:
+        data = request.get_json()
+        if not data or 'content' not in data:
+            return jsonify({'error': 'Missing "content" in request body'}), 400
+
+        user_content = data['content']
+
+        # Get user's expense summary
+        user_id = session.get('user_id')
+        if not user_id:
+            return jsonify({'error': 'User not logged in'}), 401
+
+        expense_summary = support.get_expense_summary(user_id)
+
+        # Combine user's prompt with expense data for context
+        context = f"You are a personal finance assistant. Answer questions based on the following expense data: {expense_summary}.  Now answer the user question: "
+        prompt_with_context = context + user_content
+
+        response = model.generate_content(prompt_with_context)
+        return jsonify({'response': response.text})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/ai_assistance')
+def ai_assistance():
+    """Renders the AI Assistance page."""
+    if 'user_id' not in session:
+        return redirect('/')  # Redirect to login if not logged in
+
+    query = """select * from user_login where user_id = {} """.format(session['user_id'])
+    userdata = support.execute_query("search", query)
+    user_name = userdata[0][1]
+
+    return render_template('ai_assistance.html', user_name=user_name)
+
+@app.route('/generate_ai_content', methods=['POST'])
+def generate_ai_content():
+    """
+    Endpoint to generate AI content (insights or budgeting tips) using Gemini.
+    """
+    try:
+        data = request.get_json()
+        if not data or 'content_type' not in data:
+            return jsonify({'error': 'Missing "content_type" in request body'}), 400
+
+        content_type = data['content_type']
+
+        # Get user's expense data
+        user_id = session.get('user_id')
+        if not user_id:
+            return jsonify({'error': 'User not logged in'}), 401
+
+        expense_summary = support.get_expense_summary(user_id)
+
+        # Construct the prompt based on the content type
+        if content_type == 'insights':
+            prompt = f"You are a personal finance expert. Generate 1-2 key insights based on this expense data: {expense_summary}. Focus on key trends and areas for improvement. Present each insight as a separate bullet point, using markdown format. (Also add some cool emojies)"
+        elif content_type == 'budgeting_tips':
+            prompt = f"You are a financial advisor. Generate 1-2 actionable budgeting tips based on this expense data: {expense_summary}. Present each tip as a separate bullet point, using markdown format. (Also add some cool emojies)"
+        else:
+            return jsonify({'error': 'Invalid content_type'}), 400
+
+        response = model.generate_content(prompt)
+        # Split the response into lines and format as HTML list
+        formatted_response = "<ul>"
+        for line in response.text.splitlines():
+            line = line.replace("*", "").strip()  # Remove leading asterisks and spaces
+            if line:
+                 formatted_response += f"<li>{line}</li>"
+        formatted_response += "</ul>"
+
+        return jsonify({'response': formatted_response})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 if __name__ == "__main__":
     app.run(debug=True)
