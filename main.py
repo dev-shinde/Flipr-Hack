@@ -141,7 +141,7 @@ def home():
         table_query = """select * from user_expenses where user_id = {} order by pdate desc""".format(
             session['user_id'])
         table_data = support.execute_query("search", table_query)
-        df = pd.DataFrame(table_data, columns=['#', 'User_Id', 'Date', 'Expense', 'Amount', 'Note', 'Balance'])
+        df = pd.DataFrame(table_data, columns=['#', 'User_Id', 'Date', 'Expense', 'Amount', 'Note'])
 
         df = support.generate_df(df)
         try:

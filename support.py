@@ -110,22 +110,15 @@ def generate_df(df):
     :return: df
     """
     df = df
-    try:
-        df['Date'] = pd.to_datetime(df['Date'], errors='raise')
-        df['Year'] = df['Date'].dt.year
-        df['Month_name'] = df['Date'].dt.month_name()
-        df['Month'] = df['Date'].dt.month
-        df['Day_name'] = df['Date'].dt.day_name()
-        df['Day'] = df['Date'].dt.day
-        df['Week'] = df['Date'].dt.isocalendar().week
-    except Exception as e:
-        print(f"Error processing 'Date' column: {e}")
-        # Handle the error appropriately.  For example:
-        # - Return the original DataFrame without the date-related columns
-        # - Remove rows with invalid dates
-        # - Replace invalid dates with a default value
-        return df  # Returning original dataframe
+    df['Date'] = pd.to_datetime(df['Date'])
+    df['Year'] = df['Date'].dt.year
+    df['Month_name'] = df['Date'].dt.month_name()
+    df['Month'] = df['Date'].dt.month
+    df['Day_name'] = df['Date'].dt.day_name()
+    df['Day'] = df['Date'].dt.day
+    df['Week'] = df['Date'].dt.isocalendar().week
     return df
+
 
 def num2MB(num):
     """
