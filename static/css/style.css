@@ -196,6 +196,27 @@ ul {
   list-style: none;
 }
 
+/* Add style for the description area */
+.description-area {
+  padding-left: 30px; /* Add some spacing */
+}
+
+/* Style for the darker font */
+.darker-font {
+  color: #A8A8B3; /* A slightly darker shade of gray */
+  font-weight: bold; /* Make the font darker */
+}
+
+/* Style for the analysis overview */
+.analysis-overview {
+  margin-bottom: 30px;
+}
+
+/* Style for the visualization area */
+.visualization-area {
+  /* Add some padding */
+}
+
 input {
   overflow: hidden;
 }

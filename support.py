@@ -15,7 +15,7 @@ def connect_db():
         '''CREATE TABLE IF NOT EXISTS user_login (user_id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(30) NOT NULL, 
         email VARCHAR(30) NOT NULL UNIQUE, password VARCHAR(20) NOT NULL)''')
     cur.execute(
-        '''CREATE TABLE IF NOT EXISTS user_expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, pdate DATE NOT 
+        '''CREATE TABLE IF NOT EXISTS user_expense (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, pdate DATE NOT 
         NULL, expense VARCHAR(10) NOT NULL, amount INTEGER NOT NULL, pdescription VARCHAR(50), FOREIGN KEY (user_id) 
         REFERENCES user_login(user_id))''')
     conn.commit()
@@ -64,7 +64,7 @@ def get_expense_summary(user_id):
     """
     query = """
         SELECT expense, SUM(amount)
-        FROM user_expenses
+        FROM user_expense
         WHERE user_id = {}
         GROUP BY expense
     """.format(user_id)

@@ -138,7 +138,7 @@ def home():
         query = """select * from user_login where user_id = {} """.format(session['user_id'])
         userdata = support.execute_query("search", query)
 
-        table_query = """select * from user_expenses where user_id = {} order by pdate desc""".format(
+        table_query = """select * from user_expense where user_id = {} order by pdate desc""".format(
             session['user_id'])
         table_data = support.execute_query("search", table_query)
         df = pd.DataFrame(table_data, columns=['#', 'User_Id', 'Date', 'Expense', 'Amount', 'Note'])
@@ -215,7 +215,7 @@ def add_expense():
             expense_type = categorize_expense(comment) # Define this function as described below.
 
             try:
-                query = """insert into user_expenses (user_id, pdate, expense, amount, pdescription) values 
+                query = """insert into user_expense (user_id, pdate, expense, amount, pdescription) values 
                 ({}, '{}','{}',{},'{}')""".format(user_id, date, expense_type, amount, comment)
                 support.execute_query('insert', query)
                 flash("Saved!!")
@@ -245,7 +245,7 @@ def analysis():
     if 'user_id' in session:  # if already logged-in
         query = """select * from user_login where user_id = {} """.format(session['user_id'])
         userdata = support.execute_query('search', query)
-        query2 = """select pdate,expense, pdescription, amount from user_expenses where user_id = {}""".format(
+        query2 = """select pdate,expense, pdescription, amount from user_expense where user_id = {}""".format(
             session['user_id'])
 
         data = support.execute_query('search', query2)
