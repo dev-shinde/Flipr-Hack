@@ -152,58 +152,6 @@ body.page-bg {
     background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-/* Add horizontal rule style */
-hr {
-  border-top: 1px solid #44475A; /* Color matches card border */
-  margin: 20px 0;
-}
-
-/* Add some padding around the category headings */
-h3 {
-  color: #F8F8F2; /* Match navigation link color */
-  margin-top: 30px;
-  margin-bottom: 15px;
-}
-
-/* Add style for the description area */
-.description-area {
-  padding-left: 30px; /* Add some spacing */
-}
-
-/* Style for the darker font */
-.darker-font {
-  color: #A8A8B3; /* A slightly darker shade of gray */
-}
-
-/* Add style for the description area */
-.description-area {
-  padding-left: 30px; /* Add some spacing */
-}
-
-/* Style for the darker font */
-.darker-font {
-  color: #A8A8B3; /* A slightly darker shade of gray */
-  font-weight: bold; /* Make the font darker */
-}
-
-/* Style for the analysis overview */
-.analysis-overview {
-  margin-bottom: 30px;
-}
-
-/* Style for the visualization area */
-.visualization-area {
-  /* Add some padding */
-}
-
-/* Style for the chart descriptions */
-.col-md-6 p {
-  color: #C6C6D1; /* Match body text color */
-  font-size: 0.9rem;
-  line-height: 1.4;
-  margin-top: 15px; /* Add some space between the chart and description */
-}
-
 .alive{
     background: #CB356B;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #BD3F32, #CB356B);  /* Chrome 10-25, Safari 5.1-6 */
